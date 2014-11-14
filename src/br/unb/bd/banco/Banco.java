@@ -13,6 +13,8 @@ public class Banco implements InternetConnectionJsonListener {
 		public void BancoListenerDidFinish(JSONArray arrayObject);
 	}
 	
+	private static String URL_ALL_CANDIDATOS = "http://ervilhanalata.com.br/projetos/urna_eletronica/getCandidatos.asp";
+	
 	private static Banco instance;
 	
 	private Banco() {
@@ -27,12 +29,19 @@ public class Banco implements InternetConnectionJsonListener {
 	}
 	
 	/*
+	 * Retorna todos os candidatos cadastrados no Banco.
+	 */
+	public void getAllCandidatos(BancoListener listener) {
+		InternetConnectionJson connection = new InternetConnectionJson(URL_ALL_CANDIDATOS, this, listener);
+		connection.execute();
+	}
+	
+	/*
 	 * Retorna todos os participantes do nosso grupo. Função de teste - Silent
 	 */
-	public JSONArray getParticipantesDoGrupo(BancoListener listener) {
+	public void getParticipantesDoGrupo(BancoListener listener) {
 		InternetConnectionJson connection = new InternetConnectionJson("participantes", this, listener);
 		connection.execute();
-		return null;
 	}
 
 	/*
@@ -43,6 +52,10 @@ public class Banco implements InternetConnectionJsonListener {
 	@Override
 	public void InternetConnectionJsonListenerDidFinish(String jsonString, BancoListener listenerBanco) {
 		try {
+			if (jsonString == null) {
+				listenerBanco.BancoListenerDidFinish(null);
+				return;
+			}
 			JSONArray arrayObject = new JSONArray(jsonString);
 			listenerBanco.BancoListenerDidFinish(arrayObject);
 		} catch (Exception e) {

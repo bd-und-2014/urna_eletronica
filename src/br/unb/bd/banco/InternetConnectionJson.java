@@ -1,5 +1,12 @@
 package br.unb.bd.banco;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.net.URLConnection;
+
 import javax.swing.*;
 
 import br.unb.bd.banco.Banco.BancoListener;
@@ -42,13 +49,37 @@ public class InternetConnectionJson extends SwingWorker<Void, Void> {
 			return null;
 		}
 		
+		jsonString = executeInternetConnection(url);		
+		
 		return null;
 	}
+	/* Aqui ir‡ fazer o download da String do JSON na internet */
+	public String executeInternetConnection(String urlInternet) {
+		try {
+            URL url = new URL(urlInternet);
+            InputStream is = url.openStream();
+            BufferedReader br = new BufferedReader(new InputStreamReader(is));
+            
+            String stringFinal = "";
+            String line;
+            while ( (line = br.readLine()) != null)
+                stringFinal += line;
+             
+            br.close();
+            is.close();
+            
+            return stringFinal;
+             
+        } catch (Exception e) {
+            e.printStackTrace();
+        } 
+		
+		return null;
+    }
 
 	/* Assim que acabou o background, ele ir‡ executar isso */
 	@Override
 	protected void done() {
-		System.out.println("[InternetConnectionJson] Terminou");
 		listener.InternetConnectionJsonListenerDidFinish(jsonString, listenerBanco);
 		
 		super.done();
