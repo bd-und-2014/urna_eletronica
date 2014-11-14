@@ -4,6 +4,16 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 
+import java.awt.GridLayout;
+
+import javax.swing.JButton;
+import javax.swing.SwingConstants;
+
+import org.json.*;
+
+import br.unb.bd.banco.Banco;
+import br.unb.bd.banco.Banco.BancoListener;
+
 public class MainWindow {
 
 	private JFrame frame;
@@ -22,6 +32,30 @@ public class MainWindow {
 				}
 			}
 		});
+		
+		
+		
+		exemploDeUtilizacaoDoBanco();
+		
+	}
+	
+	public static void exemploDeUtilizacaoDoBanco() {
+		/* Testar o banco inicialmente */
+		Banco.getInstance().getParticipantesDoGrupo(new BancoListener() {
+			@Override
+			public void BancoListenerDidFinish(JSONArray arrayObject) {
+				// Nesse momento o banco já executou sua função em background e tem os valores corretos
+				System.out.println("1. Imprimindo todos os valores: " + arrayObject);
+				// Como fazer para pegar todos os elementos separados:
+				for (int i = 0; i < arrayObject.length(); i++) {
+					JSONObject objAtual = arrayObject.getJSONObject(i);
+					System.out.println("2." + (i + 1) + " " + objAtual);
+				}
+				// Como faz para pegar o nome do primeiro integrante?
+				JSONObject objPrimeiro = arrayObject.getJSONObject(0);
+				System.out.println("3. " + objPrimeiro.getString("nome"));
+			}
+		});
 	}
 
 	/**
@@ -36,8 +70,6 @@ public class MainWindow {
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 450, 300);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.getContentPane().setLayout(null);
 	}
-
 }
