@@ -49,7 +49,7 @@ public class InternetConnectionJson extends SwingWorker<Void, Void> {
 			return null;
 		}
 		
-		jsonString = executeInternetConnection(url);		
+		jsonString = executeInternetConnection(url); 		
 		
 		return null;
 	}

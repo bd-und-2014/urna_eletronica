@@ -1,10 +1,11 @@
 package br.unb.bd.core;
 
 import java.awt.EventQueue;
+import java.awt.Toolkit;
 
 import javax.swing.JFrame;
 
-import java.awt.GridLayout;
+import java.awt.*;
 
 import javax.swing.JButton;
 import javax.swing.SwingConstants;
@@ -94,6 +95,14 @@ public class MainWindow {
 	 */
 	private void initialize() {
 		frame = new JFrame();
+		frame.setBounds(new Rectangle(0, 23, 800, 600));
 		frame.getContentPane().setLayout(null);
+		
+		// Setar tamanho do frame
+		
+		
+		// Colocar o frame no meio da tela
+		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+		frame.setLocation(dim.width/2-frame.getSize().width/2, dim.height/2-frame.getSize().height/2);
 	}
 }
