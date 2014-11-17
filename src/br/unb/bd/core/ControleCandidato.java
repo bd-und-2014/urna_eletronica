@@ -11,25 +11,72 @@ import javax.swing.JTable;
 import javax.swing.JLabel;
 import javax.swing.JButton;
 
+import org.json.*;
+
+import br.unb.bd.banco.Banco;
+import br.unb.bd.banco.Banco.BancoListener;
+
 import java.awt.Font;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.util.ArrayList;
 
 public class ControleCandidato extends JFrame {
 
 	private JPanel contentPane;
 	private JTable table;
 	private JScrollPane scrollBar;
-	String [] colunas = {"Número", "Nome", "Partido", "Cargo"};
-	Object [][] dados = {
-			{"45", "Aécio Neves", "PSDB", "Presidente"},
+	String [] colunas = {"Nï¿½mero", "Nome", "Partido", "Cargo"};
+	Object [][] dados;
+		/* = {
+			{"45", "Aï¿½cio Neves", "PSDB", "Presidente"},
 			{"13", "Dilma Rousseff", "PT", "Presidente"},
-		};
+		};*/
 
 	/**
 	 * Create the frame.
 	 */
 	public ControleCandidato() {
+		
+		
+		/* Criar array inicial dos dados */
+		Banco.getInstance().getAllCandidatos(new BancoListener() {
+			@Override
+			public void BancoListenerDidFinish(JSONArray arrayObject) {
+				if (arrayObject == null) {
+					System.out.println("[ERRO] Algum erro ocorreu.");
+					return;
+				}
+				ArrayList<ArrayList<String>> objetos = new ArrayList<ArrayList<String>>();
+				for (int i = 0; i < arrayObject.length(); i++) {
+					ArrayList<String> item = new ArrayList<String>();
+					JSONObject objAtual = arrayObject.getJSONObject(i);
+					item.add("" + objAtual.getInt("candidato_numero"));
+					item.add("" + objAtual.getString("candidato_nome"));
+					item.add("" + objAtual.getInt("partido_id"));
+					item.add("" + objAtual.getInt("candidato_cargo"));
+					
+					objetos.add(item);
+				}
+				
+				String[][] valores = new String[objetos.size()][4];
+				for(int i =0; i < objetos.size(); i++){
+					for(int j =0; j < 4; j++){
+						valores[i][j]= objetos.get(i).get(j);
+					}
+				}
+				
+				dados = new Object[0][0];
+				table = new JTable(valores, colunas);
+				//scrollBar = new JScrollPane(table);
+				table.setFont(new Font("Consolas", Font.PLAIN, 11));
+				table.setBounds(180, 11, 320, 288);
+				contentPane.add(table);
+				//contentPane.add(scrollBar);
+				
+			}
+		});
+		
 		setTitle("Controle de Candidatos - Urna Eletronica");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 526, 349);
@@ -60,12 +107,7 @@ public class ControleCandidato extends JFrame {
 		btnDelete.setBounds(10, 183, 160, 23);
 		contentPane.add(btnDelete);
 		
-		table = new JTable(dados, colunas);
-		//scrollBar = new JScrollPane(table);
-		table.setFont(new Font("Consolas", Font.PLAIN, 11));
-		table.setBounds(180, 11, 320, 288);
-		contentPane.add(table);
-		//contentPane.add(scrollBar);
+		
 		
 		
 		
