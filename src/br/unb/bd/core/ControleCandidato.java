@@ -61,10 +61,13 @@ public class ControleCandidato extends JFrame {
 		contentPane.add(btnDelete);
 		
 		table = new JTable(dados, colunas);
-		//scrollBar = new JScrollPane(table);
 		table.setFont(new Font("Consolas", Font.PLAIN, 11));
 		table.setBounds(180, 11, 320, 288);
 		contentPane.add(table);
+		
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(179, 11, 321, 288);
+		contentPane.add(scrollPane);
 		//contentPane.add(scrollBar);
 		
 		
