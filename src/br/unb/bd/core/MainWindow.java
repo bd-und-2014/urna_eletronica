@@ -14,6 +14,8 @@ import org.json.*;
 
 import br.unb.bd.banco.Banco;
 import br.unb.bd.banco.Banco.BancoListener;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class MainWindow {
 
@@ -34,10 +36,10 @@ public class MainWindow {
 			}
 		});
 		
-		// TODO: Criar uma view de carrendo para mostrar para o usuário isso
+		// TODO: Criar uma view de carrendo para mostrar para o usu‚Ä°rio isso
 		exemploDeUtilizacaoDoBanco();
 		exemploGetAllCandidatos();
-		// Percebam que a unica coisa linear aqui é o inicio do download.
+		// Percebam que a unica coisa linear aqui ≈Ω o inicio do download.
 		// O Download em si acontece ao mesmo tempo
 
 	}
@@ -69,7 +71,7 @@ public class MainWindow {
 					return;
 				}
 				System.out.println("- fim do carregando dos participantes...");
-				// Nesse momento o banco já executou sua função em background e tem os valores corretos
+				// Nesse momento o banco j‚Ä° executou sua funÔøΩ‚Äπo em background e tem os valores corretos
 				System.out.println("1. Imprimindo todos os valores: " + arrayObject);
 				// Como fazer para pegar todos os elementos separados:
 				for (int i = 0; i < arrayObject.length(); i++) {
@@ -97,6 +99,15 @@ public class MainWindow {
 		frame = new JFrame();
 		frame.setBounds(new Rectangle(0, 23, 800, 600));
 		frame.getContentPane().setLayout(null);
+		
+		JButton btnControleDeCandidato = new JButton("Controle de Candidatos");
+		btnControleDeCandidato.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				ControleCandidato controleCandidato = new ControleCandidato();
+			}
+		});
+		btnControleDeCandidato.setBounds(10, 11, 270, 23);
+		frame.getContentPane().add(btnControleDeCandidato);
 		
 		// Setar tamanho do frame
 		
