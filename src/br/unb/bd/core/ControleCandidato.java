@@ -108,11 +108,13 @@ public class ControleCandidato extends JFrame {
 				
 				table = new JTable(valores, colunas);
 				table.setFont(new Font("Consolas", Font.PLAIN, 11));
-				table.setBounds(180, 11, 320, 288);
-				contentPane.add(table);			
+				table.setBounds(180, 10, 320, 288);
+				contentPane.add(table);
 				contentPane.repaint();
+				
 			}
 		});
+		
 		
 		setTitle("Controle de Candidatos - Urna Eletronica");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -143,12 +145,7 @@ public class ControleCandidato extends JFrame {
 		btnDelete.setFont(new Font("Consolas", Font.PLAIN, 11));
 		btnDelete.setBounds(10, 183, 160, 23);
 		contentPane.add(btnDelete);
-		
-		
-		
-		
-		
-		
+			
 		setVisible(true);
 	}
 }

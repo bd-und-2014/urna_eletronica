@@ -99,6 +99,7 @@ public class MainWindow {
 		frame = new JFrame();
 		frame.setBounds(new Rectangle(0, 23, 800, 600));
 		frame.getContentPane().setLayout(null);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		JButton btnControleDeCandidato = new JButton("Controle de Candidatos");
 		btnControleDeCandidato.addActionListener(new ActionListener() {
