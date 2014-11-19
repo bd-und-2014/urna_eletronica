@@ -6,6 +6,7 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JLabel;
@@ -84,7 +85,7 @@ public class ControleCandidato extends JFrame {
 			@Override
 			public void BancoListenerDidFinish(JSONArray arrayObject) {
 				if (arrayObject == null) {
-					System.out.println("[ERRO] Algum erro ocorreu.");
+					JOptionPane.showMessageDialog(null, "Algum erro ocorreu na recuperação dos dados.", "Erro", JOptionPane.INFORMATION_MESSAGE);
 					return;
 				}
 				ArrayList<ArrayList<String>> objetos = new ArrayList<ArrayList<String>>();
