@@ -7,19 +7,29 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JButton;
+
 import java.awt.Font;
 import java.awt.Color;
+
 import javax.swing.SwingConstants;
+
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class CadastrarCandidato extends JFrame {
 
 	private JPanel contentPane;
-	private JTextField textField;
-	private JTextField textField_1;
-	private JTextField textField_2;
-	private JTextField textField_3;
+	private JTextField nomeField;
+	private JTextField numeroField;
+	private JTextField partidoField;
+	private JTextField estadoField;
+	private String nome;
+	private int numero;
+	private String partido;
+	private String estado;
 
 	/**
 	 * Create the frame.
@@ -33,44 +43,44 @@ public class CadastrarCandidato extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		textField = new JTextField();
-		textField.setFont(new Font("Consolas", Font.PLAIN, 11));
-		textField.setBounds(66, 46, 286, 20);
-		contentPane.add(textField);
-		textField.setColumns(10);
+		nomeField = new JTextField();
+		nomeField.setFont(new Font("Consolas", Font.PLAIN, 11));
+		nomeField.setBounds(66, 46, 286, 20);
+		contentPane.add(nomeField);
+		nomeField.setColumns(10);
 		
 		JLabel lblNome = new JLabel("Nome");
 		lblNome.setFont(new Font("Consolas", Font.PLAIN, 11));
 		lblNome.setBounds(10, 49, 46, 14);
 		contentPane.add(lblNome);
 		
-		textField_1 = new JTextField();
-		textField_1.setFont(new Font("Consolas", Font.PLAIN, 11));
-		textField_1.setColumns(10);
-		textField_1.setBounds(66, 71, 71, 20);
-		contentPane.add(textField_1);
+		numeroField = new JTextField();
+		numeroField.setFont(new Font("Consolas", Font.PLAIN, 11));
+		numeroField.setColumns(10);
+		numeroField.setBounds(66, 71, 71, 20);
+		contentPane.add(numeroField);
 		
 		JLabel lblNumero = new JLabel("N\u00FAmero");
 		lblNumero.setFont(new Font("Consolas", Font.PLAIN, 11));
 		lblNumero.setBounds(10, 74, 46, 14);
 		contentPane.add(lblNumero);
 		
-		textField_2 = new JTextField();
-		textField_2.setFont(new Font("Consolas", Font.PLAIN, 11));
-		textField_2.setColumns(10);
-		textField_2.setBounds(66, 97, 71, 20);
-		contentPane.add(textField_2);
+		partidoField = new JTextField();
+		partidoField.setFont(new Font("Consolas", Font.PLAIN, 11));
+		partidoField.setColumns(10);
+		partidoField.setBounds(66, 97, 71, 20);
+		contentPane.add(partidoField);
 		
 		JLabel lblPartido = new JLabel("Partido");
 		lblPartido.setFont(new Font("Consolas", Font.PLAIN, 11));
 		lblPartido.setBounds(10, 99, 46, 14);
 		contentPane.add(lblPartido);
 		
-		textField_3 = new JTextField();
-		textField_3.setFont(new Font("Consolas", Font.PLAIN, 11));
-		textField_3.setColumns(10);
-		textField_3.setBounds(66, 121, 124, 20);
-		contentPane.add(textField_3);
+		estadoField = new JTextField();
+		estadoField.setFont(new Font("Consolas", Font.PLAIN, 11));
+		estadoField.setColumns(10);
+		estadoField.setBounds(66, 121, 124, 20);
+		contentPane.add(estadoField);
 		
 		JLabel lblEstado = new JLabel("Estado");
 		lblEstado.setFont(new Font("Consolas", Font.PLAIN, 11));
@@ -78,6 +88,27 @@ public class CadastrarCandidato extends JFrame {
 		contentPane.add(lblEstado);
 		
 		JButton btnCadastrar = new JButton("Cadastrar");
+		btnCadastrar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if (nomeField.getText().equals("")) {
+					JOptionPane.showMessageDialog(null, "Você esqueceu de preencher o campo nome", "Erro", JOptionPane.INFORMATION_MESSAGE);
+				} else if (numeroField.getText().equals("")) {
+					JOptionPane.showMessageDialog(null, "Você esqueceu de preencher o campo número", "Erro", JOptionPane.INFORMATION_MESSAGE);
+				} else if(partidoField.getText().equals("")) {
+					JOptionPane.showMessageDialog(null, "Você esqueceu de preencher o campo partido", "Erro", JOptionPane.INFORMATION_MESSAGE);
+				}  else {
+					nome = nomeField.getText();
+					numero = Integer.parseInt(numeroField.getText());
+					partido = partidoField.getText();
+					if (estadoField.getText().equals("")) {
+						estado = "NULL";
+					} else {
+						estado = estadoField.getText();
+					}
+					// TODO cadastrar no banco de dados
+				}
+			}
+		});
 		btnCadastrar.setFont(new Font("Consolas", Font.PLAIN, 11));
 		btnCadastrar.setBounds(101, 227, 89, 23);
 		contentPane.add(btnCadastrar);
@@ -111,6 +142,14 @@ public class CadastrarCandidato extends JFrame {
 		panel.add(lblCadastrarCandidato);
 		
 		JButton btnLimpar = new JButton("Limpar");
+		btnLimpar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				nomeField.setText("");
+				numeroField.setText("");
+				partidoField.setText("");
+				estadoField.setText("");
+			}
+		});
 		btnLimpar.setFont(new Font("Consolas", Font.PLAIN, 11));
 		btnLimpar.setBounds(198, 226, 89, 23);
 		contentPane.add(btnLimpar);
