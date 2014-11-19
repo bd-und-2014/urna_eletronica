@@ -106,6 +106,8 @@ public class CadastrarCandidato extends JFrame {
 						estado = estadoField.getText();
 					}
 					// TODO cadastrar no banco de dados
+					JOptionPane.showMessageDialog(null, "Candidato cadastrado com sucesso.", "", JOptionPane.INFORMATION_MESSAGE);
+					setVisible(false);
 				}
 			}
 		});
