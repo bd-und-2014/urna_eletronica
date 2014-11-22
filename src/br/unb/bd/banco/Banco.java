@@ -6,7 +6,7 @@ import br.unb.bd.banco.InternetConnectionJson.InternetConnectionJsonListener;
 
 
 /*
- * Essa classe implementa o padrão de projeto Singleton
+ * Essa classe implementa o padr‚Äπo de projeto Singleton
  */
 public class Banco implements InternetConnectionJsonListener {
 	public interface BancoListener {
@@ -14,8 +14,13 @@ public class Banco implements InternetConnectionJsonListener {
 	}
 	
 	private static String URL_ALL_CANDIDATOS = "http://ervilhanalata.com.br/projetos/urna_eletronica/getCandidatos.asp";
+	private static String URL_ALL_PARTIDOS = "http://ervilhanalata.com.br/projetos/urna_eletronica/getPartidos.asp";
+	private static String URL_ALL_ESTADOS = "http://ervilhanalata.com.br/projetos/urna_eletronica/getEstados.asp";
+	private static String URL_ALL_CARGOS = "http://ervilhanalata.com.br/projetos/urna_eletronica/getCargos.asp";
+	//private static String URL_INSERT_CANDIDATO = "http://ervilhanalata.com.br/projetos/urna_eletronica/getCargos.asp";
 	
 	private static Banco instance;
+	
 	
 	private Banco() {
 		
@@ -36,8 +41,28 @@ public class Banco implements InternetConnectionJsonListener {
 		connection.execute();
 	}
 	
+	public void getAllPartidos(BancoListener listener) {
+		InternetConnectionJson connection = new InternetConnectionJson(URL_ALL_PARTIDOS, this, listener);
+		connection.execute();
+	}
+	
+	public void getAllEstados(BancoListener listener) {
+		InternetConnectionJson connection = new InternetConnectionJson(URL_ALL_ESTADOS, this, listener);
+		connection.execute();
+	}
+	
+	public void getAllCargos(BancoListener listener) {
+		InternetConnectionJson connection = new InternetConnectionJson(URL_ALL_CARGOS, this, listener);
+		connection.execute();
+	}
+	
+	public void insertCandidato(BancoListener listener) {
+		//InternetConnectionJson connection = new InternetConnectionJson(URL_INSERT_CANDIDATO, this, listener);
+		//connection.execute();
+	}
+	
 	/*
-	 * Retorna todos os participantes do nosso grupo. Função de teste - Silent
+	 * Retorna todos os participantes do nosso grupo. FunÔøΩ‚Äπo de teste - Silent
 	 */
 	public void getParticipantesDoGrupo(BancoListener listener) {
 		InternetConnectionJson connection = new InternetConnectionJson("participantes", this, listener);
@@ -45,9 +70,9 @@ public class Banco implements InternetConnectionJsonListener {
 	}
 
 	/*
-	 * Essa função é chamada pelo padrão de projeto
-	 * Observer quando a conexão de internet já baixou
-	 * todos os dados necessários e pode converter aquela string em um JSONArray
+	 * Essa funÔøΩ‚Äπo ≈Ω chamada pelo padr‚Äπo de projeto
+	 * Observer quando a conex‚Äπo de internet j‚Ä° baixou
+	 * todos os dados necess‚Ä°rios e pode converter aquela string em um JSONArray
 	 */
 	@Override
 	public void InternetConnectionJsonListenerDidFinish(String jsonString, BancoListener listenerBanco) {

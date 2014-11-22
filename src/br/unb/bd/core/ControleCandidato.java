@@ -1,15 +1,13 @@
 package br.unb.bd.core;
 
-import java.awt.BorderLayout;
-import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.JLabel;
 import javax.swing.JButton;
 
 import org.json.*;
@@ -29,16 +27,41 @@ public class ControleCandidato extends JFrame {
 	private JScrollPane scrollBar;
 	String [] colunas = {"N�mero", "Nome", "Partido", "Cargo"};
 	Object [][] dados;
-		/* = {
-			{"45", "A�cio Neves", "PSDB", "Presidente"},
-			{"13", "Dilma Rousseff", "PT", "Presidente"},
-		};*/
 
 	/**
 	 * Create the frame.
 	 */
 	public ControleCandidato() {
+		setTitle("Controle de Candidatos - Urna Eletronica");
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setBounds(100, 100, 526, 349);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setContentPane(contentPane);
+		contentPane.setLayout(null);
 		
+		JButton btnCreate = new JButton("Criar Candidato");
+		btnCreate.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				CadastrarCandidato cadastrarCandidato = new CadastrarCandidato();
+			}
+		});
+		
+		btnCreate.setFont(new Font("Consolas", Font.PLAIN, 11));
+		btnCreate.setBounds(10, 115, 160, 23);
+		contentPane.add(btnCreate);
+		
+		final JButton btnUpdate = new JButton("Editar Candidato");
+		btnUpdate.setEnabled(false);
+		btnUpdate.setFont(new Font("Consolas", Font.PLAIN, 11));
+		btnUpdate.setBounds(10, 149, 160, 23);
+		contentPane.add(btnUpdate);
+		
+		final JButton btnDelete = new JButton("Remover Candidato");
+		btnDelete.setEnabled(false);
+		btnDelete.setFont(new Font("Consolas", Font.PLAIN, 11));
+		btnDelete.setBounds(10, 183, 160, 23);
+		contentPane.add(btnDelete);
 		
 		/* Criar array inicial dos dados */
 		Banco.getInstance().getAllCandidatos(new BancoListener() {
@@ -55,7 +78,7 @@ public class ControleCandidato extends JFrame {
 					item.add("" + objAtual.getInt("candidato_numero"));
 					item.add("" + objAtual.getString("candidato_nome"));
 					item.add("" + objAtual.getInt("partido_id"));
-					item.add("" + objAtual.getInt("candidato_cargo"));
+					item.add("" + objAtual.getInt("cargo_id"));
 					
 					objetos.add(item);
 				}
@@ -79,7 +102,6 @@ public class ControleCandidato extends JFrame {
 		});
 		
 		
-		
 		/* Criar array inicial dos dados */
 		Banco.getInstance().getAllCandidatos(new BancoListener() {
 			@Override
@@ -95,7 +117,7 @@ public class ControleCandidato extends JFrame {
 					item.add("" + objAtual.getInt("candidato_numero"));
 					item.add("" + objAtual.getString("candidato_nome"));
 					item.add("" + objAtual.getInt("partido_id"));
-					item.add("" + objAtual.getInt("candidato_cargo"));
+					item.add("" + objAtual.getInt("candidato_id"));
 					
 					objetos.add(item);
 				}
@@ -112,41 +134,16 @@ public class ControleCandidato extends JFrame {
 				table.setBounds(180, 10, 320, 288);
 				contentPane.add(table);
 				contentPane.repaint();
+				table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+					public void valueChanged(ListSelectionEvent event) {
+						btnUpdate.setEnabled(true);
+						btnDelete.setEnabled(true);
+					}
+				});
 				
 			}
 		});
 		
-		
-		setTitle("Controle de Candidatos - Urna Eletronica");
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 526, 349);
-		contentPane = new JPanel();
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		setContentPane(contentPane);
-		contentPane.setLayout(null);
-		
-		JButton btnCreate = new JButton("Criar Candidato");
-		btnCreate.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				CadastrarCandidato cadastrarCandidato = new CadastrarCandidato();
-			}
-		});
-		btnCreate.setFont(new Font("Consolas", Font.PLAIN, 11));
-		btnCreate.setBounds(10, 115, 160, 23);
-		contentPane.add(btnCreate);
-		
-		JButton btnUpdate = new JButton("Editar Candidato");
-		btnUpdate.setEnabled(false);
-		btnUpdate.setFont(new Font("Consolas", Font.PLAIN, 11));
-		btnUpdate.setBounds(10, 149, 160, 23);
-		contentPane.add(btnUpdate);
-		
-		JButton btnDelete = new JButton("Remover Candidato");
-		btnDelete.setEnabled(false);
-		btnDelete.setFont(new Font("Consolas", Font.PLAIN, 11));
-		btnDelete.setBounds(10, 183, 160, 23);
-		contentPane.add(btnDelete);
-			
 		setVisible(true);
 	}
 }

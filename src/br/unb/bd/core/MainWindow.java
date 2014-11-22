@@ -8,14 +8,18 @@ import javax.swing.JFrame;
 import java.awt.*;
 
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 
 import org.json.*;
 
 import br.unb.bd.banco.Banco;
 import br.unb.bd.banco.Banco.BancoListener;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.JPanel;
+import javax.swing.JLabel;
 
 public class MainWindow {
 
@@ -51,11 +55,23 @@ public class MainWindow {
 			@Override
 			public void BancoListenerDidFinish(JSONArray arrayObject) {
 				if (arrayObject == null) {
-					System.out.println("[ERRO] Algum erro ocorreu.");
+					JOptionPane.showMessageDialog(null, "Algum erro ocorreu na recuperação dos dados.", "Erro", JOptionPane.INFORMATION_MESSAGE);
 					return;
 				}
 				System.out.println("- fim do carregando dos candidatos...");
 				System.out.println("1. Imprimindo todos os valores: " + arrayObject);
+			}
+		});
+	}
+	
+	public static void exemploGetAllPartidos() {
+		Banco.getInstance().getAllPartidos(new BancoListener() {
+			@Override
+			public void BancoListenerDidFinish(JSONArray arrayObject) {
+				if (arrayObject == null) {
+					JOptionPane.showMessageDialog(null, "Algum erro ocorreu na recuperação dos dados.", "Erro", JOptionPane.INFORMATION_MESSAGE);
+					return;
+				}
 			}
 		});
 	}
@@ -97,18 +113,40 @@ public class MainWindow {
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.setBounds(new Rectangle(0, 23, 800, 600));
+		frame.getContentPane().setFont(new Font("Consolas", Font.PLAIN, 11));
+		frame.setBounds(new Rectangle(0, 23, 400, 300));
 		frame.getContentPane().setLayout(null);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		JButton btnControleDeCandidato = new JButton("Controle de Candidatos");
+		btnControleDeCandidato.setFont(new Font("Consolas", Font.PLAIN, 11));
 		btnControleDeCandidato.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				ControleCandidato controleCandidato = new ControleCandidato();
 			}
 		});
-		btnControleDeCandidato.setBounds(10, 11, 270, 23);
+		btnControleDeCandidato.setBounds(73, 73, 223, 23);
 		frame.getContentPane().add(btnControleDeCandidato);
+		
+		JPanel panel_1 = new JPanel();
+		panel_1.setBackground(Color.DARK_GRAY);
+		panel_1.setBounds(10, 10, 355, 30);
+		frame.getContentPane().add(panel_1);
+		
+		JLabel lblMenuDeControle = new JLabel("Menu de Controle");
+		lblMenuDeControle.setFont(new Font("Consolas", Font.PLAIN, 11));
+		lblMenuDeControle.setForeground(Color.WHITE);
+		panel_1.add(lblMenuDeControle);
+		
+		JButton btnControleDeEleitores = new JButton("Controle de Eleitores");
+		btnControleDeEleitores.setFont(new Font("Consolas", Font.PLAIN, 11));
+		btnControleDeEleitores.setBounds(73, 107, 223, 23);
+		frame.getContentPane().add(btnControleDeEleitores);
+		
+		JButton btnControleDePartidos = new JButton("Controle de Partidos");
+		btnControleDePartidos.setFont(new Font("Consolas", Font.PLAIN, 11));
+		btnControleDePartidos.setBounds(73, 141, 223, 23);
+		frame.getContentPane().add(btnControleDePartidos);
 		
 		// Setar tamanho do frame
 		
