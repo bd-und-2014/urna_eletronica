@@ -17,7 +17,7 @@ public class Banco implements InternetConnectionJsonListener {
 	private static String URL_ALL_PARTIDOS = "http://ervilhanalata.com.br/projetos/urna_eletronica/getPartidos.asp";
 	private static String URL_ALL_ESTADOS = "http://ervilhanalata.com.br/projetos/urna_eletronica/getEstados.asp";
 	private static String URL_ALL_CARGOS = "http://ervilhanalata.com.br/projetos/urna_eletronica/getCargos.asp";
-	//private static String URL_INSERT_CANDIDATO = "http://ervilhanalata.com.br/projetos/urna_eletronica/getCargos.asp";
+	//public String URL_INSERT_CANDIDATO ;//= "http://ervilhanalata.com.br/projetos/urna_eletronica/insertCandidato.asp";
 	
 	private static Banco instance;
 	
@@ -56,9 +56,9 @@ public class Banco implements InternetConnectionJsonListener {
 		connection.execute();
 	}
 	
-	public void insertCandidato(BancoListener listener) {
-		//InternetConnectionJson connection = new InternetConnectionJson(URL_INSERT_CANDIDATO, this, listener);
-		//connection.execute();
+	public void insertCandidato(BancoListener listener, String URL_INSERT_CANDIDATO) {
+		InternetConnectionJson connection = new InternetConnectionJson(URL_INSERT_CANDIDATO, this, listener);
+		connection.execute();
 	}
 	
 	/*

@@ -25,9 +25,12 @@ public class ControleCandidato extends JFrame {
 	private JPanel contentPane;
 	private JTable table;
 	private JScrollPane scrollBar;
-	String [] colunas = {"Nï¿½mero", "Nome", "Partido", "Cargo"};
-	Object [][] dados;
-
+	private JButton btnUpdate;
+	private JButton btnDelete;
+	private String [] colunas = {"Nï¿½mero", "Nome", "Partido", "Cargo"};
+	private Object [][] dados;
+	int confirmacao;
+	
 	/**
 	 * Create the frame.
 	 */
@@ -44,6 +47,7 @@ public class ControleCandidato extends JFrame {
 		btnCreate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				CadastrarCandidato cadastrarCandidato = new CadastrarCandidato();
+				contentPane.repaint();
 			}
 		});
 		
@@ -51,58 +55,17 @@ public class ControleCandidato extends JFrame {
 		btnCreate.setBounds(10, 115, 160, 23);
 		contentPane.add(btnCreate);
 		
-		final JButton btnUpdate = new JButton("Editar Candidato");
+		btnUpdate = new JButton("Editar Candidato");
+		btnUpdate.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+			}
+		});
 		btnUpdate.setEnabled(false);
 		btnUpdate.setFont(new Font("Consolas", Font.PLAIN, 11));
 		btnUpdate.setBounds(10, 149, 160, 23);
 		contentPane.add(btnUpdate);
-		
-		final JButton btnDelete = new JButton("Remover Candidato");
-		btnDelete.setEnabled(false);
-		btnDelete.setFont(new Font("Consolas", Font.PLAIN, 11));
-		btnDelete.setBounds(10, 183, 160, 23);
-		contentPane.add(btnDelete);
-		
-		/* Criar array inicial dos dados */
-		Banco.getInstance().getAllCandidatos(new BancoListener() {
-			@Override
-			public void BancoListenerDidFinish(JSONArray arrayObject) {
-				if (arrayObject == null) {
-					System.out.println("[ERRO] Algum erro ocorreu.");
-					return;
-				}
-				ArrayList<ArrayList<String>> objetos = new ArrayList<ArrayList<String>>();
-				for (int i = 0; i < arrayObject.length(); i++) {
-					ArrayList<String> item = new ArrayList<String>();
-					JSONObject objAtual = arrayObject.getJSONObject(i);
-					item.add("" + objAtual.getInt("candidato_numero"));
-					item.add("" + objAtual.getString("candidato_nome"));
-					item.add("" + objAtual.getInt("partido_id"));
-					item.add("" + objAtual.getInt("cargo_id"));
-					
-					objetos.add(item);
-				}
 				
-				String[][] valores = new String[objetos.size()][4];
-				for(int i =0; i < objetos.size(); i++){
-					for(int j =0; j < 4; j++){
-						valores[i][j]= objetos.get(i).get(j);
-					}
-				}
-				
-				dados = new Object[0][0];
-				table = new JTable(valores, colunas);
-				//scrollBar = new JScrollPane(table);
-				table.setFont(new Font("Consolas", Font.PLAIN, 11));
-				table.setBounds(180, 11, 320, 288);
-				contentPane.add(table);
-				//contentPane.add(scrollBar);
-				
-			}
-		});
 		
-		
-		/* Criar array inicial dos dados */
 		Banco.getInstance().getAllCandidatos(new BancoListener() {
 			@Override
 			public void BancoListenerDidFinish(JSONArray arrayObject) {
@@ -114,11 +77,11 @@ public class ControleCandidato extends JFrame {
 				for (int i = 0; i < arrayObject.length(); i++) {
 					ArrayList<String> item = new ArrayList<String>();
 					JSONObject objAtual = arrayObject.getJSONObject(i);
+					//item.add("" + objAtual.getInt("candidato_id"));
 					item.add("" + objAtual.getInt("candidato_numero"));
 					item.add("" + objAtual.getString("candidato_nome"));
-					item.add("" + objAtual.getInt("partido_id"));
-					item.add("" + objAtual.getInt("candidato_id"));
-					
+					item.add("" + objAtual.getString("partido_sigla"));
+					item.add("" + objAtual.getString("estado_id"));
 					objetos.add(item);
 				}
 				
@@ -134,6 +97,7 @@ public class ControleCandidato extends JFrame {
 				table.setBounds(180, 10, 320, 288);
 				contentPane.add(table);
 				contentPane.repaint();
+				
 				table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 					public void valueChanged(ListSelectionEvent event) {
 						btnUpdate.setEnabled(true);
@@ -142,7 +106,22 @@ public class ControleCandidato extends JFrame {
 				});
 				
 			}
+		});	
+		
+		btnDelete = new JButton("Remover Candidato");
+		btnDelete.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				confirmacao = JOptionPane.showConfirmDialog(null, "Deseja mesmo remover o candidato selecionado?", "Confirmação", JOptionPane.INFORMATION_MESSAGE);
+				if (confirmacao == JOptionPane.YES_OPTION) {
+					
+				}
+				contentPane.repaint();
+			}
 		});
+		btnDelete.setEnabled(false);
+		btnDelete.setFont(new Font("Consolas", Font.PLAIN, 11));
+		btnDelete.setBounds(10, 183, 160, 23);
+		contentPane.add(btnDelete);
 		
 		setVisible(true);
 	}

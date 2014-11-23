@@ -6,8 +6,11 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 
@@ -18,6 +21,8 @@ import javax.swing.SwingConstants;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 
 import javax.swing.JComboBox;
@@ -41,8 +46,11 @@ public class CadastrarCandidato extends JFrame {
 	private JComboBox partidoComboBox;
 	private JComboBox estadoComboBox;
 	private JComboBox cargoComboBox;
-	ArrayList<ArrayList<String>> objetosPartidos, objetosEstados, objetosCargos;
-	String partido_id, estado_id, cargo_id;
+	private ArrayList<ArrayList<String>> objetosPartidos, objetosEstados, objetosCargos;
+	private String partido_id, estado_id, cargo_id;
+	private String URL_INSERT_CANDIDATO;
+	private String result;
+	private int cargo_qtdade_digitos;
 
 	/**
 	 * Create the frame.
@@ -88,27 +96,6 @@ public class CadastrarCandidato extends JFrame {
 		lblEstado.setBounds(10, 158, 46, 14);
 		contentPane.add(lblEstado);
 		
-		
-		JLabel label = new JLabel("*");
-		label.setFont(new Font("Consolas", Font.PLAIN, 11));
-		label.setBounds(355, 62, 11, 14);
-		contentPane.add(label);
-		
-		JLabel label_1 = new JLabel("*");
-		label_1.setFont(new Font("Consolas", Font.PLAIN, 11));
-		label_1.setBounds(139, 94, 11, 14);
-		contentPane.add(label_1);
-		
-		JLabel label_2 = new JLabel("*");
-		label_2.setFont(new Font("Consolas", Font.PLAIN, 11));
-		label_2.setBounds(198, 129, 11, 14);
-		contentPane.add(label_2);
-		
-		JLabel label_3 = new JLabel("*");
-		label_3.setFont(new Font("Consolas", Font.PLAIN, 11));
-		label_3.setBounds(198, 183, 11, 14);
-		contentPane.add(label_3);
-		
 		JLabel lblCargo = new JLabel("Cargo");
 		lblCargo.setFont(new Font("Consolas", Font.PLAIN, 11));
 		lblCargo.setBounds(10, 183, 46, 14);
@@ -148,10 +135,10 @@ public class CadastrarCandidato extends JFrame {
 				String[] valores = new String[objetosPartidos.size()+1];
 				valores[0] = "";
 				for(int i =1; i <= objetosPartidos.size(); i++){
-					valores[i]= objetosPartidos.get(i-1).get(2);
+					valores[i]= objetosPartidos.get(i-1).get(1);
 				}
 				partidoComboBox = new JComboBox(valores);
-				partidoComboBox.setBounds(65, 125, 125, 20);
+				partidoComboBox.setBounds(65, 125, 250, 20);
 				contentPane.add(partidoComboBox);
 				contentPane.repaint();
 			}
@@ -178,11 +165,11 @@ public class CadastrarCandidato extends JFrame {
 				String[] valores = new String[objetosEstados.size() + 1];
 				valores[0] = "";
 				for(int i = 1; i <= objetosEstados.size(); i++){
-					valores[i]= objetosEstados.get(i-1).get(0);
+					valores[i]= objetosEstados.get(i-1).get(1);
 				}
 				
 				estadoComboBox = new JComboBox(valores);
-				estadoComboBox.setBounds(65, 152, 125, 20);
+				estadoComboBox.setBounds(65, 152, 150, 20);
 				contentPane.add(estadoComboBox);
 				contentPane.repaint();
 			}
@@ -230,38 +217,69 @@ public class CadastrarCandidato extends JFrame {
 					JOptionPane.showMessageDialog(null, "Você esqueceu de preencher o campo número", "Erro", JOptionPane.INFORMATION_MESSAGE);
 				} else if (partidoComboBox.getSelectedItem().toString().equals("")){
 					JOptionPane.showMessageDialog(null, "Você esqueceu de preencher o campo partido", "Erro", JOptionPane.INFORMATION_MESSAGE);
+				} else if (estadoComboBox.getSelectedItem().toString().equals("")) {
+					JOptionPane.showMessageDialog(null, "Você esqueceu de preencher o campo estado", "Erro", JOptionPane.INFORMATION_MESSAGE);
+				} else if (cargoComboBox.getSelectedItem().toString().equals("")) {
+					JOptionPane.showMessageDialog(null, "Você esqueceu de preencher o campo cargo", "Erro", JOptionPane.INFORMATION_MESSAGE);
 				} else {
 					nome = nomeField.getText();
 					numero = Integer.parseInt(numeroField.getText());
 					partido = partidoComboBox.getSelectedItem().toString();
-					if (estadoComboBox.getSelectedItem().toString().equals("")) {
-						estado = "NULL";
-					} else {
-						estado = estadoComboBox.getSelectedItem().toString();
-					}
+					estado = estadoComboBox.getSelectedItem().toString();
+					cargo = cargoComboBox.getSelectedItem().toString();
 					
 					for(int i =0; i < objetosPartidos.size(); i++){
-						if(objetosPartidos.get(i).get(1) == partido) {
+						if(objetosPartidos.get(i).get(1).equals(partido)) {
 							partido_id = objetosPartidos.get(i).get(0);
 						}
 					}
 					
 					for(int i =0; i < objetosEstados.size(); i++){
-						if(objetosEstados.get(i).get(1) == estado) {
+						if(objetosEstados.get(i).get(1).equals(estado)) {
 							estado_id = objetosEstados.get(i).get(0);
 						}
 					}
 					
 					for(int i =0; i < objetosCargos.size(); i++){
-						if(objetosCargos.get(i).get(1) == cargo) {
+						if(objetosCargos.get(i).get(1).equals(cargo)) {
 							cargo_id = objetosCargos.get(i).get(0);
+							cargo_qtdade_digitos = Integer.parseInt(objetosCargos.get(i).get(2));
 						}
+					}
+					
+					String tmp = "" + numero;
+					
+					if(cargo_qtdade_digitos != tmp.length()) {
+						JOptionPane.showMessageDialog(null, "Quantidade de dígitos incorreta para o cargo.", "Erro", JOptionPane.INFORMATION_MESSAGE);
+						return;
 					}
 					
 					// TODO cadastrar no banco de dados
 					
+					URL_INSERT_CANDIDATO = "http://ervilhanalata.com.br/projetos/urna_eletronica/insertCandidato.asp?";
+					try {
+						URL_INSERT_CANDIDATO += "candidato_nome="+ URLEncoder.encode(nome, "UTF-8");
+						URL_INSERT_CANDIDATO += "&candidato_foto=foto&candidato_numero=";
+						URL_INSERT_CANDIDATO += numero+"&estado_id="+estado_id+"&cargo_id="+cargo_id+"&partido_id="+partido_id;
+
+					} catch (UnsupportedEncodingException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}					
+					
+					Banco.getInstance().insertCandidato(new BancoListener() {
+
+						@Override
+						public void BancoListenerDidFinish(JSONArray arrayObject) {
+							// TODO Auto-generated method stub
+							
+						}
+						
+					}, URL_INSERT_CANDIDATO);		
+					
 					JOptionPane.showMessageDialog(null, "Candidato cadastrado com sucesso.", "", JOptionPane.INFORMATION_MESSAGE);
 					setVisible(false);
+					return;
 				}
 			}
 		});

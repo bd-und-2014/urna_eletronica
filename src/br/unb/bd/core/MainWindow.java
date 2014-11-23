@@ -41,8 +41,8 @@ public class MainWindow {
 		});
 		
 		// TODO: Criar uma view de carrendo para mostrar para o usu‡rio isso
-		exemploDeUtilizacaoDoBanco();
-		exemploGetAllCandidatos();
+		//exemploDeUtilizacaoDoBanco();
+		//exemploGetAllCandidatos();
 		// Percebam que a unica coisa linear aqui Ž o inicio do download.
 		// O Download em si acontece ao mesmo tempo
 
