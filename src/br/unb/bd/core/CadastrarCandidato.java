@@ -271,15 +271,12 @@ public class CadastrarCandidato extends JFrame {
 
 						@Override
 						public void BancoListenerDidFinish(JSONArray arrayObject) {
-							// TODO Auto-generated method stub
-							
+							// TODO Auto-generated method stub	
 						}
-						
 					}, URL_INSERT_CANDIDATO);		
 					
 					JOptionPane.showMessageDialog(null, "Candidato cadastrado com sucesso.", "", JOptionPane.INFORMATION_MESSAGE);
 					setVisible(false);
-					return;
 				}
 			}
 		});

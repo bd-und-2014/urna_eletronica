@@ -29,7 +29,10 @@ public class ControleCandidato extends JFrame {
 	private JButton btnDelete;
 	private String [] colunas = {"Nï¿½mero", "Nome", "Partido", "Cargo"};
 	private Object [][] dados;
-	int confirmacao;
+	private int confirmacao;
+	private int candidato_id;
+	private String URL_DELETE_CANDIDATO;
+	private ArrayList<ArrayList<String>> objetos;
 	
 	/**
 	 * Create the frame.
@@ -73,11 +76,11 @@ public class ControleCandidato extends JFrame {
 					JOptionPane.showMessageDialog(null, "Algum erro ocorreu na recuperação dos dados.", "Erro", JOptionPane.INFORMATION_MESSAGE);
 					return;
 				}
-				ArrayList<ArrayList<String>> objetos = new ArrayList<ArrayList<String>>();
+				objetos = new ArrayList<ArrayList<String>>();
 				for (int i = 0; i < arrayObject.length(); i++) {
 					ArrayList<String> item = new ArrayList<String>();
 					JSONObject objAtual = arrayObject.getJSONObject(i);
-					//item.add("" + objAtual.getInt("candidato_id"));
+					item.add("" + objAtual.getInt("candidato_id"));
 					item.add("" + objAtual.getInt("candidato_numero"));
 					item.add("" + objAtual.getString("candidato_nome"));
 					item.add("" + objAtual.getString("partido_sigla"));
@@ -87,8 +90,8 @@ public class ControleCandidato extends JFrame {
 				
 				String[][] valores = new String[objetos.size()][4];
 				for(int i =0; i < objetos.size(); i++){
-					for(int j =0; j < 4; j++){
-						valores[i][j]= objetos.get(i).get(j);
+					for(int j =1; j < 5; j++){
+						valores[i][j-1]= objetos.get(i).get(j);
 					}
 				}
 				
@@ -113,9 +116,18 @@ public class ControleCandidato extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				confirmacao = JOptionPane.showConfirmDialog(null, "Deseja mesmo remover o candidato selecionado?", "Confirmação", JOptionPane.INFORMATION_MESSAGE);
 				if (confirmacao == JOptionPane.YES_OPTION) {
-					
+					candidato_id = Integer.parseInt(objetos.get(table.getSelectedRow()).get(0));
+					URL_DELETE_CANDIDATO = "http://ervilhanalata.com.br/projetos/urna_eletronica/deleteCandidato.asp?candidato_id="+candidato_id;
+					Banco.getInstance().deleteCandidato(new BancoListener() {
+
+						@Override
+						public void BancoListenerDidFinish(JSONArray arrayObject) {
+							// TODO Auto-generated method stub	
+						}
+					}, URL_DELETE_CANDIDATO);
+					JOptionPane.showMessageDialog(null, "Candidato removido com sucesso.", "", JOptionPane.INFORMATION_MESSAGE);
 				}
-				contentPane.repaint();
+				table.repaint();
 			}
 		});
 		btnDelete.setEnabled(false);

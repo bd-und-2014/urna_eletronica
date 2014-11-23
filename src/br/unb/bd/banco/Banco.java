@@ -61,6 +61,11 @@ public class Banco implements InternetConnectionJsonListener {
 		connection.execute();
 	}
 	
+	public void deleteCandidato(BancoListener listener, String URL_DELETE_CANDIDATO) {
+		InternetConnectionJson connection = new InternetConnectionJson(URL_DELETE_CANDIDATO, this, listener);
+		connection.execute();
+	}
+	
 	/*
 	 * Retorna todos os participantes do nosso grupo. Fun�‹o de teste - Silent
 	 */
