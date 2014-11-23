@@ -66,6 +66,11 @@ public class Banco implements InternetConnectionJsonListener {
 		connection.execute();
 	}
 	
+	public void updateCandidato(BancoListener listener, String URL_UPDATE_CANDIDATO) {
+		InternetConnectionJson connection = new InternetConnectionJson(URL_UPDATE_CANDIDATO, this, listener);
+		connection.execute();
+	}
+	
 	/*
 	 * Retorna todos os participantes do nosso grupo. Fun�‹o de teste - Silent
 	 */
