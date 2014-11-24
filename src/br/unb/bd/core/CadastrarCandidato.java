@@ -50,6 +50,7 @@ public class CadastrarCandidato extends JFrame {
 	private String partido_id, estado_id, cargo_id;
 	private String URL_INSERT_CANDIDATO;
 	private int cargo_qtdade_digitos;
+	private String[] valores;
 
 	/**
 	 * Create the frame.
@@ -62,57 +63,57 @@ public class CadastrarCandidato extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		
+
 		nomeField = new JTextField();
-		nomeField.setFont(new Font("Consolas", Font.PLAIN, 11));
 		nomeField.setBounds(66, 60, 286, 20);
+		nomeField.setFont(new Font("Consolas", Font.PLAIN, 11));
 		contentPane.add(nomeField);
 		nomeField.setColumns(10);
-		
+
 		JLabel lblNome = new JLabel("Nome");
-		lblNome.setFont(new Font("Consolas", Font.PLAIN, 11));
 		lblNome.setBounds(10, 63, 46, 14);
+		lblNome.setFont(new Font("Consolas", Font.PLAIN, 11));
 		contentPane.add(lblNome);
-		
+
 		numeroField = new JTextField();
+		numeroField.setBounds(66, 91, 71, 20);
 		numeroField.setFont(new Font("Consolas", Font.PLAIN, 11));
 		numeroField.setColumns(10);
-		numeroField.setBounds(66, 91, 71, 20);
 		contentPane.add(numeroField);
-		
+
 		JLabel lblNumero = new JLabel("N\u00FAmero");
-		lblNumero.setFont(new Font("Consolas", Font.PLAIN, 11));
 		lblNumero.setBounds(10, 94, 46, 14);
+		lblNumero.setFont(new Font("Consolas", Font.PLAIN, 11));
 		contentPane.add(lblNumero);
-		
+
 		JLabel lblPartido = new JLabel("Partido");
-		lblPartido.setFont(new Font("Consolas", Font.PLAIN, 11));
 		lblPartido.setBounds(10, 129, 46, 14);
+		lblPartido.setFont(new Font("Consolas", Font.PLAIN, 11));
 		contentPane.add(lblPartido);
-		
+
 		JLabel lblEstado = new JLabel("Estado");
-		lblEstado.setFont(new Font("Consolas", Font.PLAIN, 11));
 		lblEstado.setBounds(10, 158, 46, 14);
+		lblEstado.setFont(new Font("Consolas", Font.PLAIN, 11));
 		contentPane.add(lblEstado);
-		
+
 		JLabel lblCargo = new JLabel("Cargo");
-		lblCargo.setFont(new Font("Consolas", Font.PLAIN, 11));
 		lblCargo.setBounds(10, 183, 46, 14);
+		lblCargo.setFont(new Font("Consolas", Font.PLAIN, 11));
 		contentPane.add(lblCargo);
-			
+
 		JPanel panel = new JPanel();
-		panel.setBackground(Color.DARK_GRAY);
 		panel.setBounds(10, 10, 355, 30);
+		panel.setBackground(Color.DARK_GRAY);
 		contentPane.add(panel);
 		panel.setLayout(null);
-		
+
 		JLabel lblCadastrarCandidato = new JLabel("Cadastrar Candidato");
 		lblCadastrarCandidato.setForeground(Color.WHITE);
 		lblCadastrarCandidato.setFont(new Font("Consolas", Font.PLAIN, 11));
 		lblCadastrarCandidato.setBounds(127, 0, 132, 29);
 		lblCadastrarCandidato.setHorizontalAlignment(SwingConstants.LEFT);
 		panel.add(lblCadastrarCandidato);
-		
+
 		Banco.getInstance().getAllPartidos(new BancoListener() {
 			@Override
 			public void BancoListenerDidFinish(JSONArray arrayObject) {
@@ -127,10 +128,10 @@ public class CadastrarCandidato extends JFrame {
 					item.add("" + objAtual.getInt("partido_id"));
 					item.add("" + objAtual.getString("partido_nome"));
 					item.add("" + objAtual.getString("partido_sigla"));
-					
+
 					objetosPartidos.add(item);
 				}
-				
+
 				String[] valores = new String[objetosPartidos.size()+1];
 				valores[0] = "";
 				for(int i =1; i <= objetosPartidos.size(); i++){
@@ -142,7 +143,7 @@ public class CadastrarCandidato extends JFrame {
 				contentPane.repaint();
 			}
 		});
-		
+
 		Banco.getInstance().getAllEstados(new BancoListener() {
 			@Override
 			public void BancoListenerDidFinish(JSONArray arrayObject) {
@@ -157,23 +158,23 @@ public class CadastrarCandidato extends JFrame {
 					item.add("" + objAtual.getString("estado_id"));
 					item.add("" + objAtual.getString("estado_nome"));
 					item.add("" + objAtual.getInt("pais_id"));
-					
+
 					objetosEstados.add(item);
 				}
-				
+
 				String[] valores = new String[objetosEstados.size() + 1];
 				valores[0] = "";
 				for(int i = 1; i <= objetosEstados.size(); i++){
 					valores[i]= objetosEstados.get(i-1).get(1);
 				}
-				
+
 				estadoComboBox = new JComboBox(valores);
 				estadoComboBox.setBounds(65, 152, 150, 20);
 				contentPane.add(estadoComboBox);
 				contentPane.repaint();
 			}
 		});
-		
+
 		Banco.getInstance().getAllCargos(new BancoListener() {
 			@Override
 			public void BancoListenerDidFinish(JSONArray arrayObject) {
@@ -188,26 +189,25 @@ public class CadastrarCandidato extends JFrame {
 					item.add("" + objAtual.getInt("cargo_id"));
 					item.add("" + objAtual.getString("cargo_nome"));
 					item.add("" + objAtual.getInt("cargo_qtdade_digitos"));
-					
+
 					objetosCargos.add(item);
 				}
-				
-				String[] valores = new String[objetosCargos.size()+1];
+
+				valores = new String[objetosCargos.size()+1];
 				valores[0] = "";
 				for(int i =1; i <= objetosCargos.size(); i++){
 					valores[i]= objetosCargos.get(i-1).get(1);
 				}
-				
 				cargoComboBox = new JComboBox(valores);
 				cargoComboBox.setBounds(65, 179, 125, 20);
 				contentPane.add(cargoComboBox);
-				
+
 				contentPane.repaint();
 			}
 		});
-		
-		
+
 		JButton btnCadastrar = new JButton("Cadastrar");
+		btnCadastrar.setBounds(101, 227, 89, 23);
 		btnCadastrar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if (nomeField.getText().equals("")) {
@@ -226,36 +226,43 @@ public class CadastrarCandidato extends JFrame {
 					partido = partidoComboBox.getSelectedItem().toString();
 					estado = estadoComboBox.getSelectedItem().toString();
 					cargo = cargoComboBox.getSelectedItem().toString();
-					
+
 					for(int i =0; i < objetosPartidos.size(); i++){
 						if(objetosPartidos.get(i).get(1).equals(partido)) {
 							partido_id = objetosPartidos.get(i).get(0);
 						}
 					}
-					
+
 					for(int i =0; i < objetosEstados.size(); i++){
 						if(objetosEstados.get(i).get(1).equals(estado)) {
 							estado_id = objetosEstados.get(i).get(0);
 						}
 					}
-					
+
 					for(int i =0; i < objetosCargos.size(); i++){
 						if(objetosCargos.get(i).get(1).equals(cargo)) {
 							cargo_id = objetosCargos.get(i).get(0);
 							cargo_qtdade_digitos = Integer.parseInt(objetosCargos.get(i).get(2));
 						}
 					}
-					
+
 					String tmp = "" + numero;
-					
+
 					if(cargo_qtdade_digitos != tmp.length()) {
 						JOptionPane.showMessageDialog(null, "Quantidade de dígitos incorreta para o cargo.", "Erro", JOptionPane.INFORMATION_MESSAGE);
 						return;
 					}
-					
-					
-					URL_INSERT_CANDIDATO = "http://ervilhanalata.com.br/projetos/urna_eletronica/insertCandidato.asp?";
+
+					if(cargo.equals("Presidente") && !estado.equals("Todos os Estados")) {
+						JOptionPane.showMessageDialog(null, "Presidente deve escolher 'Todos os estados'.", "Erro", JOptionPane.INFORMATION_MESSAGE);
+						return;
+					} else if (!cargo.equals("Presidente") && estado.equals("Todos os Estados")) {
+						JOptionPane.showMessageDialog(null, "'Todos os Estados' não é valido para o cargo escolhido.", "Erro", JOptionPane.INFORMATION_MESSAGE);
+						return;						
+					}
+
 					try {
+						URL_INSERT_CANDIDATO = "http://ervilhanalata.com.br/projetos/urna_eletronica/insertCandidato.asp?";
 						URL_INSERT_CANDIDATO += "candidato_nome="+ URLEncoder.encode(nome, "UTF-8");
 						URL_INSERT_CANDIDATO += "&candidato_foto=foto&candidato_numero=";
 						URL_INSERT_CANDIDATO += numero+"&estado_id="+estado_id+"&cargo_id="+cargo_id+"&partido_id="+partido_id;
@@ -264,25 +271,24 @@ public class CadastrarCandidato extends JFrame {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}					
-					
-					Banco.getInstance().insertCandidato(new BancoListener() {
 
+					Banco.getInstance().insertCandidato(new BancoListener() {
 						@Override
 						public void BancoListenerDidFinish(JSONArray arrayObject) {
 							// TODO Auto-generated method stub	
 						}
 					}, URL_INSERT_CANDIDATO);		
-					
+
 					JOptionPane.showMessageDialog(null, "Candidato cadastrado com sucesso.", "", JOptionPane.INFORMATION_MESSAGE);
 					setVisible(false);
 				}
 			}
 		});
 		btnCadastrar.setFont(new Font("Consolas", Font.PLAIN, 11));
-		btnCadastrar.setBounds(101, 227, 89, 23);
 		contentPane.add(btnCadastrar);
-		
+
 		JButton btnLimpar = new JButton("Limpar");
+		btnLimpar.setBounds(198, 226, 89, 23);
 		btnLimpar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				nomeField.setText("");
@@ -292,11 +298,10 @@ public class CadastrarCandidato extends JFrame {
 				cargoComboBox.setSelectedIndex(0);
 			}
 		});
-		
+
 		btnLimpar.setFont(new Font("Consolas", Font.PLAIN, 11));
-		btnLimpar.setBounds(198, 226, 89, 23);
 		contentPane.add(btnLimpar);
-		
+
 		setVisible(true);
 	}
 }

@@ -14,13 +14,12 @@ public class Banco implements InternetConnectionJsonListener {
 	}
 	
 	private static String URL_ALL_CANDIDATOS = "http://ervilhanalata.com.br/projetos/urna_eletronica/getCandidatos.asp";
+	private static String URL_ALL_ELEITORES = "http://ervilhanalata.com.br/ervilha/projetos/urna_eletronica/getAllEleitores.asp";
 	private static String URL_ALL_PARTIDOS = "http://ervilhanalata.com.br/projetos/urna_eletronica/getPartidos.asp";
 	private static String URL_ALL_ESTADOS = "http://ervilhanalata.com.br/projetos/urna_eletronica/getEstados.asp";
 	private static String URL_ALL_CARGOS = "http://ervilhanalata.com.br/projetos/urna_eletronica/getCargos.asp";
-	//public String URL_INSERT_CANDIDATO ;//= "http://ervilhanalata.com.br/projetos/urna_eletronica/insertCandidato.asp";
-	
+	private static String URL_RESET_URNA = "http://ervilhanalata.com.br/projetos/urna_eletronica/ios/ipad/resetarTudo.asp";
 	private static Banco instance;
-	
 	
 	private Banco() {
 		
@@ -51,8 +50,19 @@ public class Banco implements InternetConnectionJsonListener {
 		connection.execute();
 	}
 	
+		
+	public void getAllEleitores(BancoListener listener) {
+		InternetConnectionJson connection = new InternetConnectionJson(URL_ALL_ELEITORES, this, listener);
+		connection.execute();
+	}
+	
 	public void getAllCargos(BancoListener listener) {
 		InternetConnectionJson connection = new InternetConnectionJson(URL_ALL_CARGOS, this, listener);
+		connection.execute();
+	}
+	
+	public void resetarUrna(BancoListener listener) {
+		InternetConnectionJson connection = new InternetConnectionJson(URL_RESET_URNA, this, listener);
 		connection.execute();
 	}
 	

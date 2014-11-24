@@ -23,30 +23,18 @@ import java.util.ArrayList;
 public class ControleCandidato extends JFrame {
 
 	private JPanel contentPane;
-	private JTable table;
+	public JTable table;
 	private JScrollPane scrollBar;
 	private JButton btnUpdate;
 	private JButton btnDelete;
-	private String [] colunas = {"N�mero", "Nome", "Partido", "Cargo"};
-	private Object [][] dados;
+	private String [] colunas = {"N�mero", "Nome", "Partido", "Estado", "Cargo"};
+	private String[][] valores;
 	private int confirmacao;
 	private int candidato_id;
 	private String URL_DELETE_CANDIDATO;
 	private ArrayList<ArrayList<String>> objetos;
 	
-	/**
-	 * Create the frame.
-	 */
-	public ControleCandidato() {
-		setTitle("Controle de Candidatos - Urna Eletronica");
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 526, 349);
-		contentPane = new JPanel();
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		setContentPane(contentPane);
-		contentPane.setLayout(null);
-				
-		// Recupera Candidatos --------------------------------------------------------------------------
+	public void candidatoTable() {
 		Banco.getInstance().getAllCandidatos(new BancoListener() {
 			@Override
 			public void BancoListenerDidFinish(JSONArray arrayObject) {
@@ -63,20 +51,20 @@ public class ControleCandidato extends JFrame {
 					item.add("" + objAtual.getString("candidato_nome"));
 					item.add("" + objAtual.getString("partido_sigla"));
 					item.add("" + objAtual.getString("estado_id"));
+					item.add("" + objAtual.getString("cargo_nome"));
 					objetos.add(item);
 				}
 				
-				String[][] valores = new String[objetos.size()][4];
+				valores = new String[objetos.size()][5];
 				for(int i =0; i < objetos.size(); i++){
-					for(int j =1; j < 5; j++){
+					for(int j =1; j < 6; j++){
 						valores[i][j-1]= objetos.get(i).get(j);
 					}
 				}
 				
 				table = new JTable(valores, colunas);
 				table.setFont(new Font("Consolas", Font.PLAIN, 11));
-				table.setBounds(180, 10, 320, 288);
-				table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+				table.setBounds(180, 10, 400, 288);
 				contentPane.add(table);
 				contentPane.repaint();
 				
@@ -88,14 +76,30 @@ public class ControleCandidato extends JFrame {
 				});
 			}
 		});	
-		
+	}
+	
+	/**
+	 * Create the frame.
+	 */
+	public ControleCandidato() {
+		setTitle("Controle de Candidatos - Urna Eletronica");
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setBounds(100, 100, 619, 350);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setContentPane(contentPane);
+		contentPane.setLayout(null);
+				
+		// Recupera Candidatos --------------------------------------------------------------------------
+		candidatoTable();
+			
 		// Cadastra Candidato -----------------------------------------------------------------------
 		JButton btnCreate = new JButton("Criar Candidato");
 		btnCreate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				CadastrarCandidato cadastrarCandidato = new CadastrarCandidato();
-
 			}
+			
 		});
 		btnCreate.setFont(new Font("Consolas", Font.PLAIN, 11));
 		btnCreate.setBounds(10, 115, 160, 23);
@@ -106,7 +110,7 @@ public class ControleCandidato extends JFrame {
 		btnUpdate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				ArrayList<String> candidato = new ArrayList<String>();
-				for (int i = 0; i < 5; i++) {
+				for (int i = 0; i < 6; i++) {
 					candidato.add(objetos.get(table.getSelectedRow()).get(i));
 				}
 				EditarCandidato editarCandidato = new EditarCandidato(candidato);
@@ -126,7 +130,6 @@ public class ControleCandidato extends JFrame {
 					candidato_id = Integer.parseInt(objetos.get(table.getSelectedRow()).get(0));
 					URL_DELETE_CANDIDATO = "http://ervilhanalata.com.br/projetos/urna_eletronica/deleteCandidato.asp?candidato_id="+candidato_id;
 					Banco.getInstance().deleteCandidato(new BancoListener() {
-
 						@Override
 						public void BancoListenerDidFinish(JSONArray arrayObject) {
 							// TODO Auto-generated method stub	
@@ -134,13 +137,14 @@ public class ControleCandidato extends JFrame {
 					}, URL_DELETE_CANDIDATO);
 					JOptionPane.showMessageDialog(null, "Candidato removido com sucesso.", "", JOptionPane.INFORMATION_MESSAGE);
 				}
-				table.repaint();
 			}
 		});
 		btnDelete.setEnabled(false);
 		btnDelete.setFont(new Font("Consolas", Font.PLAIN, 11));
 		btnDelete.setBounds(10, 183, 160, 23);
 		contentPane.add(btnDelete);
+		
+		
 		
 		setVisible(true);
 	}

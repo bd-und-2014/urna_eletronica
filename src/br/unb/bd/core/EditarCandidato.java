@@ -31,6 +31,7 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
+
 public class EditarCandidato extends JFrame {
 
 	private JPanel contentPane;
@@ -46,8 +47,8 @@ public class EditarCandidato extends JFrame {
 	private JComboBox cargoComboBox;
 	private ArrayList<ArrayList<String>> objetosPartidos, objetosEstados, objetosCargos;
 	private String URL_UPDATE_CANDIDATO;
-	private String partido_id, estado_id, cargo_id;
-	private int cargo_qtdade_digitos;
+	private String partido_id, estado_id, cargo_id ;
+	private int cargo_qtdade_digitos, partidoIndex, estadoIndex, cargoIndex;
 
 	/**
 	 * Create the frame.
@@ -135,9 +136,13 @@ public class EditarCandidato extends JFrame {
 				valores[0] = "";
 				for(int i =1; i <= objetosPartidos.size(); i++){
 					valores[i]= objetosPartidos.get(i-1).get(1);
+					if (candidato.get(3).equals(objetosPartidos.get(i-1).get(2))){
+						partidoIndex = i;
+					}
 				}
 				partidoComboBox = new JComboBox(valores);
 				partidoComboBox.setBounds(65, 115, 250, 20);
+				partidoComboBox.setSelectedIndex(partidoIndex);
 				contentPane.add(partidoComboBox);
 				contentPane.repaint();
 			}
@@ -165,10 +170,14 @@ public class EditarCandidato extends JFrame {
 				valores[0] = "";
 				for(int i = 1; i <= objetosEstados.size(); i++){
 					valores[i]= objetosEstados.get(i-1).get(1);
+					if (candidato.get(4).equals(objetosEstados.get(i-1).get(0))){
+						estadoIndex = i;
+					}
 				}
 				
 				estadoComboBox = new JComboBox(valores);
 				estadoComboBox.setBounds(65, 142, 150, 20);
+				estadoComboBox.setSelectedIndex(estadoIndex);
 				contentPane.add(estadoComboBox);
 				contentPane.repaint();
 			}
@@ -196,12 +205,15 @@ public class EditarCandidato extends JFrame {
 				valores[0] = "";
 				for(int i =1; i <= objetosCargos.size(); i++){
 					valores[i]= objetosCargos.get(i-1).get(1);
+					if (candidato.get(5).equals(valores[i])){
+						cargoIndex = i;
+					}
 				}
 				
 				cargoComboBox = new JComboBox(valores);
 				cargoComboBox.setBounds(65, 169, 125, 20);
+				cargoComboBox.setSelectedIndex(cargoIndex);
 				contentPane.add(cargoComboBox);
-				
 				contentPane.repaint();
 			}
 		});
@@ -251,6 +263,14 @@ public class EditarCandidato extends JFrame {
 						JOptionPane.showMessageDialog(null, "Quantidade de dígitos incorreta para o cargo.", "Erro", JOptionPane.INFORMATION_MESSAGE);
 						return;
 					}
+					
+					if(cargo.equals("Presidente") && !estado.equals("Todos os Estados")) {
+						JOptionPane.showMessageDialog(null, "Presidente deve escolher 'Todos os estados'.", "Erro", JOptionPane.INFORMATION_MESSAGE);
+						return;
+					} else if (!cargo.equals("Presidente") && estado.equals("Todos os Estados")) {
+						JOptionPane.showMessageDialog(null, "'Todos os Estados' não é valido para o cargo escolhido.", "Erro", JOptionPane.INFORMATION_MESSAGE);
+						return;						
+					}
 				}
 				try {
 					URL_UPDATE_CANDIDATO = "http://ervilhanalata.com.br/projetos/urna_eletronica/updateCandidato.asp?";
@@ -263,7 +283,6 @@ public class EditarCandidato extends JFrame {
 				}			
 				
 				Banco.getInstance().updateCandidato(new BancoListener() {
-
 					@Override
 					public void BancoListenerDidFinish(JSONArray arrayObject) {
 						// TODO Auto-generated method stub	
@@ -271,12 +290,27 @@ public class EditarCandidato extends JFrame {
 				}, URL_UPDATE_CANDIDATO);		
 				
 				JOptionPane.showMessageDialog(null, "Candidato editado com sucesso.", "", JOptionPane.INFORMATION_MESSAGE);
+				
 				setVisible(false);
 			}
 		});
 		btnConcluir.setFont(new Font("Consolas", Font.PLAIN, 11));
-		btnConcluir.setBounds(176, 215, 89, 23);
+		btnConcluir.setBounds(115, 227, 89, 23);
 		contentPane.add(btnConcluir);
+		
+		JButton btnLimpar = new JButton("Limpar");
+		btnLimpar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				nomeField.setText("");
+				numeroField.setText("");
+				partidoComboBox.setSelectedIndex(0);
+				estadoComboBox.setSelectedIndex(0);
+				cargoComboBox.setSelectedIndex(0);
+			}
+		});
+		btnLimpar.setFont(new Font("Consolas", Font.PLAIN, 11));
+		btnLimpar.setBounds(214, 226, 89, 23);
+		contentPane.add(btnLimpar);
 		
 		
 		setVisible(true);

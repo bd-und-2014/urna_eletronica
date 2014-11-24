@@ -22,9 +22,11 @@ import javax.swing.JPanel;
 import javax.swing.JLabel;
 
 public class MainWindow {
+	
 
 	private JFrame frame;
-
+	private int confirmacao;
+	
 	/**
 	 * Launch the application.
 	 */
@@ -139,14 +141,33 @@ public class MainWindow {
 		panel_1.add(lblMenuDeControle);
 		
 		JButton btnControleDeEleitores = new JButton("Controle de Eleitores");
+		btnControleDeEleitores.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				ControleEleitor controleEleitor = new ControleEleitor();
+			}
+		});
 		btnControleDeEleitores.setFont(new Font("Consolas", Font.PLAIN, 11));
 		btnControleDeEleitores.setBounds(73, 107, 223, 23);
 		frame.getContentPane().add(btnControleDeEleitores);
 		
-		JButton btnControleDePartidos = new JButton("Controle de Partidos");
-		btnControleDePartidos.setFont(new Font("Consolas", Font.PLAIN, 11));
-		btnControleDePartidos.setBounds(73, 141, 223, 23);
-		frame.getContentPane().add(btnControleDePartidos);
+		JButton btnNewButton = new JButton("Resetar Urna");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				confirmacao = JOptionPane.showConfirmDialog(null, "Deseja mesmo resetar a Urna?", "Confirmação", JOptionPane.INFORMATION_MESSAGE);
+				if (confirmacao == JOptionPane.YES_OPTION) {
+					Banco.getInstance().resetarUrna(new BancoListener() {
+						@Override
+						public void BancoListenerDidFinish(JSONArray arrayObject) {
+							// TODO Auto-generated method stub	
+						}
+					});
+					JOptionPane.showMessageDialog(null, "Urna Resetada com sucesso.", "", JOptionPane.INFORMATION_MESSAGE);
+				}
+			}
+		});
+		btnNewButton.setFont(new Font("Consolas", Font.PLAIN, 11));
+		btnNewButton.setBounds(73, 197, 223, 23);
+		frame.getContentPane().add(btnNewButton);
 		
 		// Setar tamanho do frame
 		
