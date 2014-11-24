@@ -5,6 +5,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.table.JTableHeader;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -24,17 +25,30 @@ public class ControleCandidato extends JFrame {
 
 	private JPanel contentPane;
 	public JTable table;
-	private JScrollPane scrollBar;
+	private JScrollPane scrollPane;
 	private JButton btnUpdate;
 	private JButton btnDelete;
-	private String [] colunas = {"N�mero", "Nome", "Partido", "Estado", "Cargo"};
+	private String [] colunas = {"Numero", "Nome", "Partido", "Estado", "Cargo"};
 	private String[][] valores;
 	private int confirmacao;
 	private int candidato_id;
 	private String URL_DELETE_CANDIDATO;
 	private ArrayList<ArrayList<String>> objetos;
 	
-	public void candidatoTable() {
+	
+	/**
+	 * Create the frame.
+	 */
+	public ControleCandidato() {
+		setTitle("Controle de Candidatos - Urna Eletronica");
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setBounds(100, 100, 619, 350);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setContentPane(contentPane);
+		contentPane.setLayout(null);
+				
+		// Recupera Candidatos --------------------------------------------------------------------------
 		Banco.getInstance().getAllCandidatos(new BancoListener() {
 			@Override
 			public void BancoListenerDidFinish(JSONArray arrayObject) {
@@ -63,9 +77,11 @@ public class ControleCandidato extends JFrame {
 				}
 				
 				table = new JTable(valores, colunas);
+				
 				table.setFont(new Font("Consolas", Font.PLAIN, 11));
-				table.setBounds(180, 10, 400, 288);
-				contentPane.add(table);
+				scrollPane = new JScrollPane(table);
+				scrollPane.setBounds(180, 10, 400, 288);
+				contentPane.add(scrollPane);
 				contentPane.repaint();
 				
 				table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
@@ -76,28 +92,12 @@ public class ControleCandidato extends JFrame {
 				});
 			}
 		});	
-	}
-	
-	/**
-	 * Create the frame.
-	 */
-	public ControleCandidato() {
-		setTitle("Controle de Candidatos - Urna Eletronica");
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 619, 350);
-		contentPane = new JPanel();
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		setContentPane(contentPane);
-		contentPane.setLayout(null);
-				
-		// Recupera Candidatos --------------------------------------------------------------------------
-		candidatoTable();
 			
 		// Cadastra Candidato -----------------------------------------------------------------------
-		JButton btnCreate = new JButton("Criar Candidato");
+		JButton btnCreate = new JButton("Cadastrar Candidato");
 		btnCreate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				dispose();;
+				dispose();
 				CadastrarCandidato cadastrarCandidato = new CadastrarCandidato();
 			}
 			
