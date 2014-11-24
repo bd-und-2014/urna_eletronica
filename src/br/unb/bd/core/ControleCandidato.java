@@ -97,6 +97,7 @@ public class ControleCandidato extends JFrame {
 		JButton btnCreate = new JButton("Criar Candidato");
 		btnCreate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				setVisible(false);
 				CadastrarCandidato cadastrarCandidato = new CadastrarCandidato();
 			}
 			
@@ -109,6 +110,7 @@ public class ControleCandidato extends JFrame {
 		btnUpdate = new JButton("Editar Candidato");
 		btnUpdate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				setVisible(false);
 				ArrayList<String> candidato = new ArrayList<String>();
 				for (int i = 0; i < 6; i++) {
 					candidato.add(objetos.get(table.getSelectedRow()).get(i));
@@ -127,6 +129,7 @@ public class ControleCandidato extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				confirmacao = JOptionPane.showConfirmDialog(null, "Deseja mesmo remover o candidato selecionado?", "Confirmação", JOptionPane.INFORMATION_MESSAGE);
 				if (confirmacao == JOptionPane.YES_OPTION) {
+					setVisible(false);
 					candidato_id = Integer.parseInt(objetos.get(table.getSelectedRow()).get(0));
 					URL_DELETE_CANDIDATO = "http://ervilhanalata.com.br/projetos/urna_eletronica/deleteCandidato.asp?candidato_id="+candidato_id;
 					Banco.getInstance().deleteCandidato(new BancoListener() {
