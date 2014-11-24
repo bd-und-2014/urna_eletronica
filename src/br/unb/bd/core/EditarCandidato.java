@@ -263,7 +263,6 @@ public class EditarCandidato extends JFrame {
 						JOptionPane.showMessageDialog(null, "Quantidade de dígitos incorreta para o cargo.", "Erro", JOptionPane.INFORMATION_MESSAGE);
 						return;
 					}
-					
 					if(cargo.equals("Presidente") && !estado.equals("Todos os Estados")) {
 						JOptionPane.showMessageDialog(null, "Presidente deve escolher 'Todos os estados'.", "Erro", JOptionPane.INFORMATION_MESSAGE);
 						return;
@@ -291,7 +290,7 @@ public class EditarCandidato extends JFrame {
 				
 				JOptionPane.showMessageDialog(null, "Candidato editado com sucesso.", "", JOptionPane.INFORMATION_MESSAGE);
 				
-				setVisible(false);
+				dispose();
 			}
 		});
 		btnConcluir.setFont(new Font("Consolas", Font.PLAIN, 11));

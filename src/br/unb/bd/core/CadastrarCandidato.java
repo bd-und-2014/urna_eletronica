@@ -138,7 +138,7 @@ public class CadastrarCandidato extends JFrame {
 					valores[i]= objetosPartidos.get(i-1).get(1);
 				}
 				partidoComboBox = new JComboBox(valores);
-				partidoComboBox.setBounds(65, 125, 250, 20);
+				partidoComboBox.setBounds(65, 125, 285, 20);
 				contentPane.add(partidoComboBox);
 				contentPane.repaint();
 			}
@@ -280,7 +280,7 @@ public class CadastrarCandidato extends JFrame {
 					}, URL_INSERT_CANDIDATO);		
 
 					JOptionPane.showMessageDialog(null, "Candidato cadastrado com sucesso.", "", JOptionPane.INFORMATION_MESSAGE);
-					setVisible(false);
+					dispose();
 				}
 			}
 		});
