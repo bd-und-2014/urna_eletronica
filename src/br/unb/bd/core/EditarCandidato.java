@@ -4,7 +4,9 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 
+import javax.imageio.ImageIO;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -21,6 +23,8 @@ import javax.swing.JTextField;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import com.sun.org.apache.xml.internal.security.utils.Base64;
 
 import br.unb.bd.banco.Banco;
 import br.unb.bd.banco.Banco.BancoListener;
@@ -62,7 +66,7 @@ public class EditarCandidato extends JFrame {
 		this.listener = editarCandidatoListener;
 		setTitle("Editar Candidato - Urna Eletronica");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
+		setBounds(100, 100, 434, 438);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -82,55 +86,55 @@ public class EditarCandidato extends JFrame {
 		
 		JLabel lblNome = new JLabel("Nome ");
 		lblNome.setFont(new Font("Consolas", Font.PLAIN, 11));
-		lblNome.setBounds(10, 59, 56, 14);
+		lblNome.setBounds(10, 208, 56, 14);
 		contentPane.add(lblNome);
 		
 		nomeField = new JTextField();
 		nomeField.setFont(new Font("Consolas", Font.PLAIN, 11));
-		nomeField.setBounds(65, 56, 200, 20);
+		nomeField.setBounds(65, 205, 200, 20);
 		nomeField.setText(candidato.get(2));
 		nomeField.setColumns(10);
 		contentPane.add(nomeField);
 		
 		JLabel lblNmero = new JLabel("N\u00FAmero");
 		lblNmero.setFont(new Font("Consolas", Font.PLAIN, 11));
-		lblNmero.setBounds(10, 90, 56, 14);
+		lblNmero.setBounds(10, 239, 56, 14);
 		contentPane.add(lblNmero);
 		
 		numeroField = new JTextField();
 		numeroField.setFont(new Font("Consolas", Font.PLAIN, 11));
-		numeroField.setBounds(65, 87, 86, 20);
+		numeroField.setBounds(65, 236, 86, 20);
 		contentPane.add(numeroField);
 		numeroField.setText(candidato.get(1));
 		numeroField.setColumns(10);
 		
 		JLabel lblPartido = new JLabel("Partido");
 		lblPartido.setFont(new Font("Consolas", Font.PLAIN, 11));
-		lblPartido.setBounds(10, 120, 46, 14);
+		lblPartido.setBounds(10, 269, 46, 14);
 		contentPane.add(lblPartido);
 		
 		JLabel lblEstado = new JLabel("Estado");
 		lblEstado.setFont(new Font("Consolas", Font.PLAIN, 11));
-		lblEstado.setBounds(10, 145, 46, 14);
+		lblEstado.setBounds(10, 294, 46, 14);
 		contentPane.add(lblEstado);
 		
 		JLabel lblCargo = new JLabel("Cargo");
 		lblCargo.setFont(new Font("Consolas", Font.PLAIN, 11));
-		lblCargo.setBounds(10, 170, 46, 14);
+		lblCargo.setBounds(10, 319, 46, 14);
 		contentPane.add(lblCargo);
 		
 		partidoComboBox = new JComboBox(new String[0]);
-		partidoComboBox.setBounds(65, 115, 285, 20);
+		partidoComboBox.setBounds(65, 264, 285, 20);
 		partidoComboBox.setEnabled(false);
 		contentPane.add(partidoComboBox);
 		
 		estadoComboBox = new JComboBox(new String[0]);
-		estadoComboBox.setBounds(65, 142, 150, 20);
+		estadoComboBox.setBounds(65, 291, 150, 20);
 		estadoComboBox.setEnabled(false);
 		contentPane.add(estadoComboBox);
 		
 		cargoComboBox = new JComboBox(new String[0]);
-		cargoComboBox.setBounds(65, 169, 125, 20);
+		cargoComboBox.setBounds(65, 318, 125, 20);
 		cargoComboBox.setEnabled(false);
 		contentPane.add(cargoComboBox);
 		
@@ -138,7 +142,7 @@ public class EditarCandidato extends JFrame {
 			@Override
 			public void BancoListenerDidFinish(JSONArray arrayObject) {
 				if (arrayObject == null) {
-					JOptionPane.showMessageDialog(null, "Algum erro ocorreu na recuperação dos dados.", "Erro", JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showMessageDialog(null, "Algum erro ocorreu na recuperaï¿½ï¿½o dos dados.", "Erro", JOptionPane.INFORMATION_MESSAGE);
 					return;
 				}
 				objetosPartidos = new ArrayList<ArrayList<String>>();
@@ -170,7 +174,7 @@ public class EditarCandidato extends JFrame {
 			@Override
 			public void BancoListenerDidFinish(JSONArray arrayObject) {
 				if (arrayObject == null) {
-					JOptionPane.showMessageDialog(null, "Algum erro ocorreu na recuperação dos dados.", "Erro", JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showMessageDialog(null, "Algum erro ocorreu na recuperaï¿½ï¿½o dos dados.", "Erro", JOptionPane.INFORMATION_MESSAGE);
 					return;
 				}
 				objetosEstados = new ArrayList<ArrayList<String>>();
@@ -202,7 +206,7 @@ public class EditarCandidato extends JFrame {
 			@Override
 			public void BancoListenerDidFinish(JSONArray arrayObject) {
 				if (arrayObject == null) {
-					JOptionPane.showMessageDialog(null, "Algum erro ocorreu na recuperação dos dados.", "Erro", JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showMessageDialog(null, "Algum erro ocorreu na recuperaï¿½ï¿½o dos dados.", "Erro", JOptionPane.INFORMATION_MESSAGE);
 					return;
 				}
 				objetosCargos = new ArrayList<ArrayList<String>>();
@@ -234,19 +238,19 @@ public class EditarCandidato extends JFrame {
 		btnConcluir.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if (nomeField.getText().equals("")) {
-					JOptionPane.showMessageDialog(null, "Você esqueceu de preencher o campo nome", "Erro", JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showMessageDialog(null, "Vocï¿½ esqueceu de preencher o campo nome", "Erro", JOptionPane.INFORMATION_MESSAGE);
 					return;
 				} else if (numeroField.getText().equals("")) {
-					JOptionPane.showMessageDialog(null, "Você esqueceu de preencher o campo número", "Erro", JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showMessageDialog(null, "Vocï¿½ esqueceu de preencher o campo nï¿½mero", "Erro", JOptionPane.INFORMATION_MESSAGE);
 					return;
 				} else if (partidoComboBox.getSelectedItem().toString().equals("")){
-					JOptionPane.showMessageDialog(null, "Você esqueceu de preencher o campo partido", "Erro", JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showMessageDialog(null, "Vocï¿½ esqueceu de preencher o campo partido", "Erro", JOptionPane.INFORMATION_MESSAGE);
 					return;
 				} else if (estadoComboBox.getSelectedItem().toString().equals("")) {
-					JOptionPane.showMessageDialog(null, "Você esqueceu de preencher o campo estado", "Erro", JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showMessageDialog(null, "Vocï¿½ esqueceu de preencher o campo estado", "Erro", JOptionPane.INFORMATION_MESSAGE);
 					return;
 				} else if (cargoComboBox.getSelectedItem().toString().equals("")) {
-					JOptionPane.showMessageDialog(null, "Você esqueceu de preencher o campo cargo", "Erro", JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showMessageDialog(null, "Vocï¿½ esqueceu de preencher o campo cargo", "Erro", JOptionPane.INFORMATION_MESSAGE);
 					return;
 				} else {
 					nome = nomeField.getText();
@@ -277,14 +281,14 @@ public class EditarCandidato extends JFrame {
 					String tmp = "" + numero;
 					
 					if(cargo_qtdade_digitos != tmp.length()) {
-						JOptionPane.showMessageDialog(null, "Quantidade de dígitos incorreta para o cargo.", "Erro", JOptionPane.INFORMATION_MESSAGE);
+						JOptionPane.showMessageDialog(null, "Quantidade de dï¿½gitos incorreta para o cargo.", "Erro", JOptionPane.INFORMATION_MESSAGE);
 						return;
 					}
 					if(cargo.equals("Presidente") && !estado.equals("Todos os Estados")) {
 						JOptionPane.showMessageDialog(null, "Presidente deve escolher 'Todos os estados'.", "Erro", JOptionPane.INFORMATION_MESSAGE);
 						return;
 					} else if (!cargo.equals("Presidente") && estado.equals("Todos os Estados")) {
-						JOptionPane.showMessageDialog(null, "'Todos os Estados' não é valido para o cargo escolhido.", "Erro", JOptionPane.INFORMATION_MESSAGE);
+						JOptionPane.showMessageDialog(null, "'Todos os Estados' nï¿½o ï¿½ valido para o cargo escolhido.", "Erro", JOptionPane.INFORMATION_MESSAGE);
 						return;						
 					}
 				}
@@ -311,7 +315,7 @@ public class EditarCandidato extends JFrame {
 			}
 		});
 		btnConcluir.setFont(new Font("Consolas", Font.PLAIN, 11));
-		btnConcluir.setBounds(115, 227, 89, 23);
+		btnConcluir.setBounds(115, 376, 89, 23);
 		contentPane.add(btnConcluir);
 		
 		JButton btnLimpar = new JButton("Limpar");
@@ -325,8 +329,28 @@ public class EditarCandidato extends JFrame {
 			}
 		});
 		btnLimpar.setFont(new Font("Consolas", Font.PLAIN, 11));
-		btnLimpar.setBounds(214, 226, 89, 23);
+		btnLimpar.setBounds(214, 375, 89, 23);
 		contentPane.add(btnLimpar);
+		
+		JLabel lblNewLabel = new JLabel("");
+		lblNewLabel.setBounds(165, 67, 99, 100);
+		contentPane.add(lblNewLabel);
+		
+		try {
+			byte[] imageByte = Base64.decode(candidato.get(6));
+			ImageIcon imagem = new ImageIcon(imageByte);
+			lblNewLabel.setIcon(imagem);
+			/*
+			BufferedImage image = ImageIO.read(arquivoFoto); 
+			ByteArrayOutputStream baos = new ByteArrayOutputStream(); 
+			ImageIO.write(image, "jpg", baos); 
+			byte[] res = baos.toByteArray();
+			
+			encodedImageString = Base64.encode(res);
+			*/
+		} catch(Exception e) {
+			
+		}
 		
 		
 		setVisible(true);

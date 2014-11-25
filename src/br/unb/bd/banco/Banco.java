@@ -1,5 +1,8 @@
 package br.unb.bd.banco;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+
 import org.json.*;
 
 import br.unb.bd.banco.InternetConnectionJson.InternetConnectionJsonListener;
@@ -19,6 +22,7 @@ public class Banco implements InternetConnectionJsonListener {
 	private static String URL_ALL_ESTADOS = "http://ervilhanalata.com.br/projetos/urna_eletronica/getEstados.asp";
 	private static String URL_ALL_CARGOS = "http://ervilhanalata.com.br/projetos/urna_eletronica/getCargos.asp";
 	private static String URL_RESET_URNA = "http://ervilhanalata.com.br/projetos/urna_eletronica/ios/ipad/resetarTudo.asp";
+	private static String URL_INSERT_CANDIDATO = "http://ervilhanalata.com.br/projetos/urna_eletronica/insertCandidato.asp?";
 	private static Banco instance;
 	
 	private Banco() {
@@ -37,6 +41,7 @@ public class Banco implements InternetConnectionJsonListener {
 	
 	public void getInfoVotosEstado(BancoListener listener, String estadoID) {
 		//TODO: Implementar isso aqui
+		
 		String jsonString = "[{'porcentagem':45, 'deputado_estadual':'candidato_deputado', 'deputado_federal':'candidato_deputado', 'senador':'candidato_senador', 'governador':'governador',  'presidente':'candidato_presidente'}]";
 		JSONArray arrayObject = new JSONArray(jsonString);
 		listener.BancoListenerDidFinish(arrayObject);
@@ -76,9 +81,25 @@ public class Banco implements InternetConnectionJsonListener {
 		connection.execute();
 	}
 	
-	public void insertCandidato(BancoListener listener, String URL_INSERT_CANDIDATO) {
-		InternetConnectionJson connection = new InternetConnectionJson(URL_INSERT_CANDIDATO, this, listener);
-		connection.execute();
+	public void insertCandidato(BancoListener listener, String candidato_nome, String candidato_foto, String candidato_numero, String estado_id, String cargo_id, String partido_id) {
+		
+		try {
+			String urlFinal = URL_INSERT_CANDIDATO + "candidato_nome=" + URLEncoder.encode(candidato_nome, "UTF-8");
+			urlFinal += "&candidato_foto=" + URLEncoder.encode(candidato_foto.replace("\n", ""), "UTF-8");
+			urlFinal += "&candidato_numero=" + candidato_numero;
+			urlFinal += "&estado_id=" + estado_id;
+			urlFinal += "&cargo_id=" + cargo_id;
+			urlFinal += "&partido_id=" + partido_id;
+			
+			System.out.println("hey: " + urlFinal);
+			
+			InternetConnectionJson connection = new InternetConnectionJson(urlFinal, this, listener);
+			connection.execute();
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 	
 	public void deleteCandidato(BancoListener listener, String URL_DELETE_CANDIDATO) {

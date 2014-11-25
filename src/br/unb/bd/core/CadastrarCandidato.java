@@ -1,9 +1,13 @@
 package br.unb.bd.core;
 
+import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
@@ -11,14 +15,22 @@ import javax.swing.JButton;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
+import java.awt.Component;
 import java.awt.Font;
 import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.Insets;
 
 import javax.swing.SwingConstants;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.math.BigInteger;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 
@@ -27,8 +39,22 @@ import javax.swing.JComboBox;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+
+
+
+
+
+
+import com.sun.org.apache.xml.internal.security.utils.Base64;
+
 import br.unb.bd.banco.Banco;
 import br.unb.bd.banco.Banco.BancoListener;
+
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
+import java.awt.image.BufferedImage;
 
 public class CadastrarCandidato extends JFrame {
 
@@ -53,11 +79,26 @@ public class CadastrarCandidato extends JFrame {
 	// URL
 	private String URL_INSERT_CANDIDATO;
 	public CadastrarCandidatoListener listener;
+	
+	public JButton btnCadastrar;
+	
+	/* Foto */
+	
+	public File arquivoFoto;
+	public JLabel lblNewLabel;
 
 	
 	public interface CadastrarCandidatoListener {
 		public void didFinishedCadastrar();
 	}
+	/*
+	 * byte[] decodedString = Base64.decode(img, Base64.DEFAULT);
+	Bitmap bitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+	if (bitmap != null) {
+	Drawable image = new BitmapDrawable(Bitmap.createScaledBitmap(bitmap, 90, 100, true));
+	}
+	 */
+	
 	
 	/**
 	 * Create the frame.
@@ -66,46 +107,46 @@ public class CadastrarCandidato extends JFrame {
 		this.listener = cadastrarCandidatoListener;
 		setTitle("Cadastrar Candidato - Urna Eletronica");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 400, 300);
+		setBounds(100, 100, 379, 398);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 
 		nomeField = new JTextField();
-		nomeField.setBounds(66, 60, 286, 20);
+		nomeField.setBounds(66, 163, 286, 20);
 		nomeField.setFont(new Font("Consolas", Font.PLAIN, 11));
 		contentPane.add(nomeField);
 		nomeField.setColumns(10);
 
 		JLabel lblNome = new JLabel("Nome");
-		lblNome.setBounds(10, 63, 46, 14);
+		lblNome.setBounds(10, 166, 46, 14);
 		lblNome.setFont(new Font("Consolas", Font.PLAIN, 11));
 		contentPane.add(lblNome);
 
 		numeroField = new JTextField();
-		numeroField.setBounds(66, 91, 71, 20);
+		numeroField.setBounds(66, 194, 71, 20);
 		numeroField.setFont(new Font("Consolas", Font.PLAIN, 11));
 		numeroField.setColumns(10);
 		contentPane.add(numeroField);
 
 		JLabel lblNumero = new JLabel("N\u00FAmero");
-		lblNumero.setBounds(10, 94, 46, 14);
+		lblNumero.setBounds(10, 197, 46, 14);
 		lblNumero.setFont(new Font("Consolas", Font.PLAIN, 11));
 		contentPane.add(lblNumero);
 
 		JLabel lblPartido = new JLabel("Partido");
-		lblPartido.setBounds(10, 129, 46, 14);
+		lblPartido.setBounds(10, 232, 46, 14);
 		lblPartido.setFont(new Font("Consolas", Font.PLAIN, 11));
 		contentPane.add(lblPartido);
 
 		JLabel lblEstado = new JLabel("Estado");
-		lblEstado.setBounds(10, 158, 46, 14);
+		lblEstado.setBounds(10, 261, 46, 14);
 		lblEstado.setFont(new Font("Consolas", Font.PLAIN, 11));
 		contentPane.add(lblEstado);
 
 		JLabel lblCargo = new JLabel("Cargo");
-		lblCargo.setBounds(10, 183, 46, 14);
+		lblCargo.setBounds(10, 286, 46, 14);
 		lblCargo.setFont(new Font("Consolas", Font.PLAIN, 11));
 		contentPane.add(lblCargo);
 
@@ -123,17 +164,17 @@ public class CadastrarCandidato extends JFrame {
 		panel.add(lblCadastrarCandidato);
 		
 		partidoComboBox = new JComboBox(new String[0]);
-		partidoComboBox.setBounds(65, 125, 285, 20);
+		partidoComboBox.setBounds(65, 228, 285, 20);
 		partidoComboBox.setEnabled(false);
 		contentPane.add(partidoComboBox);
 		
 		estadoComboBox = new JComboBox(new String[0]);
-		estadoComboBox.setBounds(65, 152, 150, 20);
+		estadoComboBox.setBounds(65, 255, 150, 20);
 		estadoComboBox.setEnabled(false);
 		contentPane.add(estadoComboBox);
 		
 		cargoComboBox = new JComboBox(new String[0]);
-		cargoComboBox.setBounds(65, 179, 125, 20);
+		cargoComboBox.setBounds(65, 282, 125, 20);
 		cargoComboBox.setEnabled(false);
 		contentPane.add(cargoComboBox);
 
@@ -236,8 +277,8 @@ public class CadastrarCandidato extends JFrame {
 			}
 		});
 
-		JButton btnCadastrar = new JButton("Cadastrar");
-		btnCadastrar.setBounds(101, 227, 89, 23);
+		btnCadastrar = new JButton("Cadastrar");
+		btnCadastrar.setBounds(101, 330, 89, 23);
 		btnCadastrar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if (nomeField.getText().equals("")) {
@@ -295,6 +336,7 @@ public class CadastrarCandidato extends JFrame {
 						return;						
 					}
 
+					/*
 					try {
 						URL_INSERT_CANDIDATO = "http://ervilhanalata.com.br/projetos/urna_eletronica/insertCandidato.asp?";
 						URL_INSERT_CANDIDATO += "candidato_nome="+ URLEncoder.encode(nome, "UTF-8");
@@ -304,17 +346,37 @@ public class CadastrarCandidato extends JFrame {
 					} catch (UnsupportedEncodingException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
-					}					
-
+					}	
+					*/			
+					String encodedImageString = "";
+					try {
+						BufferedImage image = ImageIO.read(arquivoFoto); 
+						ByteArrayOutputStream baos = new ByteArrayOutputStream(); 
+						ImageIO.write(image, "jpg", baos); 
+						byte[] res = baos.toByteArray();
+						
+						encodedImageString = Base64.encode(res);
+					} catch(Exception e) {
+						
+					}
+					
+					/*
+					Bitmap bitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+					if (bitmap != null) {
+					Drawable image = new BitmapDrawable(Bitmap.createScaledBitmap(bitmap, 90, 100, true));
+					*/
+					
+					btnCadastrar.setEnabled(false);
 					Banco.getInstance().insertCandidato(new BancoListener() {
 						@Override
 						public void BancoListenerDidFinish(JSONArray arrayObject) {
+							btnCadastrar.setEnabled(true);
+							if (arrayObject == null) { return; }
+							JOptionPane.showMessageDialog(null, "Candidato cadastrado com sucesso.", "", JOptionPane.INFORMATION_MESSAGE);
+							dispose();
+							listener.didFinishedCadastrar();
 						}
-					}, URL_INSERT_CANDIDATO);		
-
-					JOptionPane.showMessageDialog(null, "Candidato cadastrado com sucesso.", "", JOptionPane.INFORMATION_MESSAGE);
-					dispose();
-					listener.didFinishedCadastrar();
+					}, nome, encodedImageString, "" + numero, estado_id, cargo_id, partido_id);		
 				}
 			}
 		});
@@ -322,7 +384,7 @@ public class CadastrarCandidato extends JFrame {
 		contentPane.add(btnCadastrar);
 
 		JButton btnLimpar = new JButton("Limpar");
-		btnLimpar.setBounds(198, 226, 89, 23);
+		btnLimpar.setBounds(198, 329, 89, 23);
 		btnLimpar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				nomeField.setText("");
@@ -334,7 +396,40 @@ public class CadastrarCandidato extends JFrame {
 		});
 		btnLimpar.setFont(new Font("Consolas", Font.PLAIN, 11));
 		contentPane.add(btnLimpar);
+		
+		JButton btnCarregarImagem = new JButton("Carregar imagem");
+		btnCarregarImagem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				JOptionPane.showMessageDialog(null, "Selecione a imagem (.jpg)");
+				JFileChooser fc = new JFileChooser("Imagens/");
+				fc.setDialogTitle("Abrir");
+				fc.showOpenDialog(null);
+				arquivoFoto = fc.getSelectedFile();
+				if(arquivoFoto == null) {
+					JOptionPane.showMessageDialog(null, "[Arquivo] Não foi escolhida nenhuma foto", "[ERRO]", JOptionPane.ERROR_MESSAGE);
+				}
+				BufferedImage myPicture;
+				try {
+					myPicture = ImageIO.read(arquivoFoto);
+					lblNewLabel.setIcon(new ImageIcon(myPicture));
+					
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				
+			}
+		});
+		
+		btnCarregarImagem.setBounds(211, 92, 141, 30);
+		contentPane.add(btnCarregarImagem);
+		
+		lblNewLabel = new JLabel("");
+		lblNewLabel.setBounds(92, 51, 89, 100);
+		contentPane.add(lblNewLabel);
 
 		setVisible(true);
 	}
+	
 }

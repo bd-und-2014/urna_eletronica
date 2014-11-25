@@ -45,7 +45,7 @@ public class ControleCandidato extends JFrame {
 			@Override
 			public void BancoListenerDidFinish(JSONArray arrayObject) {
 				if (arrayObject == null) {
-					JOptionPane.showMessageDialog(null, "Algum erro ocorreu na recuperação dos dados.", "Erro", JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showMessageDialog(null, "Algum erro ocorreu na recuperaï¿½ï¿½o dos dados.", "Erro", JOptionPane.INFORMATION_MESSAGE);
 					return;
 				}
 				objetos = new ArrayList<ArrayList<String>>();
@@ -58,6 +58,7 @@ public class ControleCandidato extends JFrame {
 					item.add("" + objAtual.getString("partido_sigla"));
 					item.add("" + objAtual.getString("estado_id"));
 					item.add("" + objAtual.getString("cargo_nome"));
+					item.add("" + objAtual.getString("candidato_foto"));
 					objetos.add(item);
 				}
 				
@@ -124,7 +125,7 @@ public class ControleCandidato extends JFrame {
 		btnUpdate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				ArrayList<String> candidato = new ArrayList<String>();
-				for (int i = 0; i < 6; i++) {
+				for (int i = 0; i < 7; i++) {
 					candidato.add(objetos.get(table.getSelectedRow()).get(i));
 				}
 				EditarCandidato editarCandidato = new EditarCandidato(candidato, new EditarCandidatoListener() {
@@ -146,7 +147,7 @@ public class ControleCandidato extends JFrame {
 		btnDelete = new JButton("Remover Candidato");
 		btnDelete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				confirmacao = JOptionPane.showConfirmDialog(null, "Deseja mesmo remover o candidato selecionado?", "Confirmação", JOptionPane.INFORMATION_MESSAGE);
+				confirmacao = JOptionPane.showConfirmDialog(null, "Deseja mesmo remover o candidato selecionado?", "Confirmaï¿½ï¿½o", JOptionPane.INFORMATION_MESSAGE);
 				if (confirmacao == JOptionPane.YES_OPTION) {
 					//dispose();
 					candidato_id = Integer.parseInt(objetos.get(table.getSelectedRow()).get(0));
