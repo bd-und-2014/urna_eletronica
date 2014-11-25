@@ -3,10 +3,13 @@ package br.unb.bd.core;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JButton;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 
 import java.awt.Font;
 import java.awt.Color;
@@ -54,6 +57,13 @@ public class CadastrarCandidato extends JFrame {
 	 * Create the frame.
 	 */
 	public CadastrarCandidato() {
+		try {
+			//UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+			//UIManager.setLookAndFeel("javax.swing.plaf.metal");
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		} 
+		
 		setTitle("Cadastrar Candidato - Urna Eletronica");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 400, 300);
@@ -111,12 +121,27 @@ public class CadastrarCandidato extends JFrame {
 		lblCadastrarCandidato.setBounds(127, 0, 132, 29);
 		lblCadastrarCandidato.setHorizontalAlignment(SwingConstants.LEFT);
 		panel.add(lblCadastrarCandidato);
+		
+		partidoComboBox = new JComboBox(new String[0]);
+		partidoComboBox.setBounds(65, 125, 285, 20);
+		partidoComboBox.setEnabled(false);
+		contentPane.add(partidoComboBox);
+		
+		estadoComboBox = new JComboBox(new String[0]);
+		estadoComboBox.setBounds(65, 152, 150, 20);
+		estadoComboBox.setEnabled(false);
+		contentPane.add(estadoComboBox);
+		
+		cargoComboBox = new JComboBox(new String[0]);
+		cargoComboBox.setBounds(65, 179, 125, 20);
+		cargoComboBox.setEnabled(false);
+		contentPane.add(cargoComboBox);
 
 		Banco.getInstance().getAllPartidos(new BancoListener() {
 			@Override
 			public void BancoListenerDidFinish(JSONArray arrayObject) {
 				if (arrayObject == null) {
-					JOptionPane.showMessageDialog(null, "Algum erro ocorreu na recuperação dos dados.", "Erro", JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showMessageDialog(null, "Algum erro ocorreu na recuperaï¿½ï¿½o dos dados.", "Erro", JOptionPane.INFORMATION_MESSAGE);
 					return;
 				}
 				objetosPartidos = new ArrayList<ArrayList<String>>();
@@ -135,10 +160,13 @@ public class CadastrarCandidato extends JFrame {
 				for(int i =1; i <= objetosPartidos.size(); i++){
 					valores[i]= objetosPartidos.get(i-1).get(1);
 				}
-				partidoComboBox = new JComboBox(valores);
-				partidoComboBox.setBounds(65, 125, 285, 20);
-				contentPane.add(partidoComboBox);
-				contentPane.repaint();
+//				partidoComboBox = new JComboBox(valores);
+//				partidoComboBox.setBounds(65, 125, 285, 20);
+//				contentPane.add(partidoComboBox);
+				partidoComboBox.setModel(new DefaultComboBoxModel(valores));
+				partidoComboBox.setEnabled(true);
+
+				//contentPane.repaint();
 			}
 		});
 
@@ -146,7 +174,7 @@ public class CadastrarCandidato extends JFrame {
 			@Override
 			public void BancoListenerDidFinish(JSONArray arrayObject) {
 				if (arrayObject == null) {
-					JOptionPane.showMessageDialog(null, "Algum erro ocorreu na recuperação dos dados.", "Erro", JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showMessageDialog(null, "Algum erro ocorreu na recuperaï¿½ï¿½o dos dados.", "Erro", JOptionPane.INFORMATION_MESSAGE);
 					return;
 				}
 				objetosEstados = new ArrayList<ArrayList<String>>();
@@ -166,10 +194,12 @@ public class CadastrarCandidato extends JFrame {
 					valores[i]= objetosEstados.get(i-1).get(1);
 				}
 
-				estadoComboBox = new JComboBox(valores);
-				estadoComboBox.setBounds(65, 152, 150, 20);
-				contentPane.add(estadoComboBox);
-				contentPane.repaint();
+//				estadoComboBox = new JComboBox(valores);
+//				estadoComboBox.setBounds(65, 152, 150, 20);
+//				contentPane.add(estadoComboBox);
+				estadoComboBox.setModel(new DefaultComboBoxModel(valores));
+				estadoComboBox.setEnabled(true);
+				//contentPane.repaint();
 			}
 		});
 
@@ -177,7 +207,7 @@ public class CadastrarCandidato extends JFrame {
 			@Override
 			public void BancoListenerDidFinish(JSONArray arrayObject) {
 				if (arrayObject == null) {
-					JOptionPane.showMessageDialog(null, "Algum erro ocorreu na recuperação dos dados.", "Erro", JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showMessageDialog(null, "Algum erro ocorreu na recuperaï¿½ï¿½o dos dados.", "Erro", JOptionPane.INFORMATION_MESSAGE);
 					return;
 				}
 				objetosCargos = new ArrayList<ArrayList<String>>();
@@ -196,11 +226,13 @@ public class CadastrarCandidato extends JFrame {
 				for(int i =1; i <= objetosCargos.size(); i++){
 					valores[i]= objetosCargos.get(i-1).get(1);
 				}
-				cargoComboBox = new JComboBox(valores);
-				cargoComboBox.setBounds(65, 179, 125, 20);
-				contentPane.add(cargoComboBox);
-
-				contentPane.repaint();
+//				cargoComboBox = new JComboBox(valores);
+//				cargoComboBox.setBounds(65, 179, 125, 20);
+//				contentPane.add(cargoComboBox);
+				cargoComboBox.setModel(new DefaultComboBoxModel(valores));
+				cargoComboBox.setEnabled(true);
+				
+				//contentPane.repaint();
 			}
 		});
 
@@ -209,19 +241,19 @@ public class CadastrarCandidato extends JFrame {
 		btnCadastrar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if (nomeField.getText().equals("")) {
-					JOptionPane.showMessageDialog(null, "Você esqueceu de preencher o campo nome", "Erro", JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showMessageDialog(null, "Vocï¿½ esqueceu de preencher o campo nome", "Erro", JOptionPane.INFORMATION_MESSAGE);
 					return;
 				} else if (numeroField.getText().equals("")) {
-					JOptionPane.showMessageDialog(null, "Você esqueceu de preencher o campo número", "Erro", JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showMessageDialog(null, "Vocï¿½ esqueceu de preencher o campo nï¿½mero", "Erro", JOptionPane.INFORMATION_MESSAGE);
 					return;
 				} else if (partidoComboBox.getSelectedItem().toString().equals("")){
-					JOptionPane.showMessageDialog(null, "Você esqueceu de preencher o campo partido", "Erro", JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showMessageDialog(null, "Vocï¿½ esqueceu de preencher o campo partido", "Erro", JOptionPane.INFORMATION_MESSAGE);
 					return;
 				} else if (estadoComboBox.getSelectedItem().toString().equals("")) {
-					JOptionPane.showMessageDialog(null, "Você esqueceu de preencher o campo estado", "Erro", JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showMessageDialog(null, "Vocï¿½ esqueceu de preencher o campo estado", "Erro", JOptionPane.INFORMATION_MESSAGE);
 					return;
 				} else if (cargoComboBox.getSelectedItem().toString().equals("")) {
-					JOptionPane.showMessageDialog(null, "Você esqueceu de preencher o campo cargo", "Erro", JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showMessageDialog(null, "Vocï¿½ esqueceu de preencher o campo cargo", "Erro", JOptionPane.INFORMATION_MESSAGE);
 					return;
 				} else {
 					nome = nomeField.getText();
@@ -252,14 +284,14 @@ public class CadastrarCandidato extends JFrame {
 					String tmp = "" + numero;
 
 					if(cargo_qtdade_digitos != tmp.length()) {
-						JOptionPane.showMessageDialog(null, "Quantidade de dígitos incorreta para o cargo.", "Erro", JOptionPane.INFORMATION_MESSAGE);
+						JOptionPane.showMessageDialog(null, "Quantidade de dï¿½gitos incorreta para o cargo.", "Erro", JOptionPane.INFORMATION_MESSAGE);
 						return;
 					}
 					if(cargo.equals("Presidente") && !estado.equals("Todos os Estados")) {
 						JOptionPane.showMessageDialog(null, "Presidente deve escolher 'Todos os estados'.", "Erro", JOptionPane.INFORMATION_MESSAGE);
 						return;
 					} else if (!cargo.equals("Presidente") && estado.equals("Todos os Estados")) {
-						JOptionPane.showMessageDialog(null, "'Todos os Estados' não é valido para o cargo escolhido.", "Erro", JOptionPane.INFORMATION_MESSAGE);
+						JOptionPane.showMessageDialog(null, "'Todos os Estados' nï¿½o ï¿½ valido para o cargo escolhido.", "Erro", JOptionPane.INFORMATION_MESSAGE);
 						return;						
 					}
 
