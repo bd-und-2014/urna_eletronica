@@ -9,8 +9,6 @@ import java.awt.*;
 
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
-import javax.swing.SwingConstants;
-
 import org.json.*;
 
 import br.unb.bd.banco.Banco;

@@ -1,7 +1,5 @@
 package br.unb.bd.core;
 
-import java.awt.BorderLayout;
-import java.awt.EventQueue;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -32,6 +30,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
 
+
 public class EditarCandidato extends JFrame {
 
 	private JPanel contentPane;
@@ -49,11 +48,17 @@ public class EditarCandidato extends JFrame {
 	private String URL_UPDATE_CANDIDATO;
 	private String partido_id, estado_id, cargo_id ;
 	private int cargo_qtdade_digitos, partidoIndex, estadoIndex, cargoIndex;
+	public final EditarCandidatoListener listener;
+	
+	public interface EditarCandidatoListener {
+		public void didFinishedEditar();
+	}
 
 	/**
 	 * Create the frame.
 	 */
-	public EditarCandidato(final ArrayList<String> candidato) {
+	public EditarCandidato(final ArrayList<String> candidato, EditarCandidatoListener editarCandidatoListener) {
+		this.listener = editarCandidatoListener;
 		setTitle("Editar Candidato - Urna Eletronica");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
@@ -82,9 +87,9 @@ public class EditarCandidato extends JFrame {
 		nomeField = new JTextField();
 		nomeField.setFont(new Font("Consolas", Font.PLAIN, 11));
 		nomeField.setBounds(65, 56, 200, 20);
-		contentPane.add(nomeField);
 		nomeField.setText(candidato.get(2));
 		nomeField.setColumns(10);
+		contentPane.add(nomeField);
 		
 		JLabel lblNmero = new JLabel("N\u00FAmero");
 		lblNmero.setFont(new Font("Consolas", Font.PLAIN, 11));
@@ -142,7 +147,7 @@ public class EditarCandidato extends JFrame {
 					}
 				}
 				partidoComboBox = new JComboBox(valores);
-				partidoComboBox.setBounds(65, 115, 250, 20);
+				partidoComboBox.setBounds(65, 115, 285, 20);
 				partidoComboBox.setSelectedIndex(partidoIndex);
 				contentPane.add(partidoComboBox);
 				contentPane.repaint();
@@ -295,8 +300,8 @@ public class EditarCandidato extends JFrame {
 				}, URL_UPDATE_CANDIDATO);		
 				
 				JOptionPane.showMessageDialog(null, "Candidato editado com sucesso.", "", JOptionPane.INFORMATION_MESSAGE);
+				listener.didFinishedEditar();
 				dispose();
-				ControleCandidato controleCandidato = new ControleCandidato();
 			}
 		});
 		btnConcluir.setFont(new Font("Consolas", Font.PLAIN, 11));

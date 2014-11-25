@@ -1,8 +1,5 @@
 package br.unb.bd.core;
 
-import java.awt.BorderLayout;
-import java.awt.EventQueue;
-
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -12,10 +9,6 @@ import javax.swing.JTable;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-
-import java.awt.Color;
-
-import javax.swing.JLabel;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -55,7 +48,7 @@ public class ControleEleitor extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		
+
 		// Recupera Eleitores --------------------------------------------------------------------------
 		Banco.getInstance().getAllEleitores(new BancoListener() {
 			@Override
@@ -132,9 +125,10 @@ public class ControleEleitor extends JFrame {
 		btnDelete = new JButton("Remover Eleitor");
 		btnDelete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				dispose();
+				
 				confirmacao = JOptionPane.showConfirmDialog(null, "Deseja mesmo remover o Eleitor selecionado?", "Confirmação", JOptionPane.INFORMATION_MESSAGE);
 				if (confirmacao == JOptionPane.YES_OPTION) {
+					dispose();
 					//eleitor_id = Integer.parseInt(objetos.get(table.getSelectedRow()).get(0));
 					//URL_DELETE_ELEITOR = 
 					/*Banco.getInstance().deleteEleitor(new BancoListener() {

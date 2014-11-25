@@ -1,7 +1,5 @@
 package br.unb.bd.core;
 
-import java.awt.BorderLayout;
-import java.awt.EventQueue;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
@@ -12,12 +10,14 @@ import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.JButton;
 import javax.swing.JTextField;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class EditarEleitor extends JFrame {
 
 	private JPanel contentPane;
-	private JTextField textField;
-
+	private JTextField nomeTextField;
+	
 
 	/**
 	 * Create the frame.
@@ -59,13 +59,19 @@ public class EditarEleitor extends JFrame {
 		contentPane.add(btnConcluir);
 		
 		JButton btnLimpar = new JButton("Limpar");
+		btnLimpar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				nomeTextField.setText("");
+			}
+		});
 		btnLimpar.setBounds(223, 181, 89, 23);
 		contentPane.add(btnLimpar);
 		
-		textField = new JTextField();
-		textField.setBounds(55, 56, 223, 20);
-		contentPane.add(textField);
-		textField.setColumns(10);
+		nomeTextField = new JTextField();
+		nomeTextField.setBounds(55, 56, 223, 20);
+		contentPane.add(nomeTextField);
+		nomeTextField.setText(eleitor.get(2));
+		nomeTextField.setColumns(10);
 		
 		setVisible(true);
 	}

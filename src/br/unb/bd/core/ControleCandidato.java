@@ -15,6 +15,7 @@ import org.json.*;
 
 import br.unb.bd.banco.Banco;
 import br.unb.bd.banco.Banco.BancoListener;
+import br.unb.bd.core.EditarCandidato.EditarCandidatoListener;
 
 import java.awt.Font;
 import java.awt.event.ActionListener;
@@ -36,19 +37,8 @@ public class ControleCandidato extends JFrame {
 	private ArrayList<ArrayList<String>> objetos;
 	
 	
-	/**
-	 * Create the frame.
-	 */
-	public ControleCandidato() {
-		setTitle("Controle de Candidatos - Urna Eletronica");
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 620, 350);
-		contentPane = new JPanel();
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		setContentPane(contentPane);
-		contentPane.setLayout(null);
-				
-		// Recupera Candidatos --------------------------------------------------------------------------
+	public void refreshTable() {
+		
 		Banco.getInstance().getAllCandidatos(new BancoListener() {
 			@Override
 			public void BancoListenerDidFinish(JSONArray arrayObject) {
@@ -91,6 +81,23 @@ public class ControleCandidato extends JFrame {
 				});
 			}
 		});	
+		
+	}
+	
+	/**
+	 * Create the frame.
+	 */
+	public ControleCandidato() {
+		setTitle("Controle de Candidatos - Urna Eletronica");
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setBounds(100, 100, 620, 350);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setContentPane(contentPane);
+		contentPane.setLayout(null);
+				
+		// Recupera Candidatos --------------------------------------------------------------------------
+		refreshTable();
 		// Cadastra Candidato -----------------------------------------------------------------------
 		JButton btnCreate = new JButton("Cadastrar Candidato");
 		btnCreate.addActionListener(new ActionListener() {
@@ -108,12 +115,18 @@ public class ControleCandidato extends JFrame {
 		btnUpdate = new JButton("Editar Candidato");
 		btnUpdate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				dispose();
 				ArrayList<String> candidato = new ArrayList<String>();
 				for (int i = 0; i < 6; i++) {
 					candidato.add(objetos.get(table.getSelectedRow()).get(i));
 				}
-				EditarCandidato editarCandidato = new EditarCandidato(candidato);
+				EditarCandidato editarCandidato = new EditarCandidato(candidato, new EditarCandidatoListener() {
+					@Override
+					public void didFinishedEditar() {
+						contentPane.remove(scrollPane);
+						refreshTable();
+						
+					}
+				});
 			}
 		});
 		btnUpdate.setEnabled(false);
@@ -127,7 +140,7 @@ public class ControleCandidato extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				confirmacao = JOptionPane.showConfirmDialog(null, "Deseja mesmo remover o candidato selecionado?", "Confirmação", JOptionPane.INFORMATION_MESSAGE);
 				if (confirmacao == JOptionPane.YES_OPTION) {
-					dispose();
+					//dispose();
 					candidato_id = Integer.parseInt(objetos.get(table.getSelectedRow()).get(0));
 					URL_DELETE_CANDIDATO = "http://ervilhanalata.com.br/projetos/urna_eletronica/deleteCandidato.asp?candidato_id="+candidato_id;
 					Banco.getInstance().deleteCandidato(new BancoListener() {
@@ -137,6 +150,8 @@ public class ControleCandidato extends JFrame {
 						}
 					}, URL_DELETE_CANDIDATO);
 					JOptionPane.showMessageDialog(null, "Candidato removido com sucesso.", "", JOptionPane.INFORMATION_MESSAGE);
+					contentPane.remove(scrollPane);
+					refreshTable();
 				}
 			}
 		});
