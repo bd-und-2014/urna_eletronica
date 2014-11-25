@@ -16,6 +16,8 @@ import org.json.*;
 import br.unb.bd.banco.Banco;
 import br.unb.bd.banco.Banco.BancoListener;
 import br.unb.bd.core.EditarCandidato.EditarCandidatoListener;
+import br.unb.bd.core.CadastrarCandidato.CadastrarCandidatoListener;
+
 
 import java.awt.Font;
 import java.awt.event.ActionListener;
@@ -102,8 +104,14 @@ public class ControleCandidato extends JFrame {
 		JButton btnCreate = new JButton("Cadastrar Candidato");
 		btnCreate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				dispose();
-				CadastrarCandidato cadastrarCandidato = new CadastrarCandidato();
+				CadastrarCandidato cadastrarCandidato = new CadastrarCandidato(new CadastrarCandidatoListener() {
+					@Override
+					public void didFinishedCadastrar() {
+						// TODO Auto-generated method stub
+						contentPane.remove(scrollPane);
+						refreshTable();						
+					}
+				});
 			}
 			
 		});

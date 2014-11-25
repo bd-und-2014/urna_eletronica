@@ -4,6 +4,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -118,7 +119,20 @@ public class EditarCandidato extends JFrame {
 		lblCargo.setBounds(10, 170, 46, 14);
 		contentPane.add(lblCargo);
 		
+		partidoComboBox = new JComboBox(new String[0]);
+		partidoComboBox.setBounds(65, 115, 285, 20);
+		partidoComboBox.setEnabled(false);
+		contentPane.add(partidoComboBox);
 		
+		estadoComboBox = new JComboBox(new String[0]);
+		estadoComboBox.setBounds(65, 142, 150, 20);
+		estadoComboBox.setEnabled(false);
+		contentPane.add(estadoComboBox);
+		
+		cargoComboBox = new JComboBox(new String[0]);
+		cargoComboBox.setBounds(65, 169, 125, 20);
+		cargoComboBox.setEnabled(false);
+		contentPane.add(cargoComboBox);
 		
 		Banco.getInstance().getAllPartidos(new BancoListener() {
 			@Override
@@ -146,11 +160,9 @@ public class EditarCandidato extends JFrame {
 						partidoIndex = i;
 					}
 				}
-				partidoComboBox = new JComboBox(valores);
-				partidoComboBox.setBounds(65, 115, 285, 20);
+				partidoComboBox.setModel(new DefaultComboBoxModel(valores));
 				partidoComboBox.setSelectedIndex(partidoIndex);
-				contentPane.add(partidoComboBox);
-				contentPane.repaint();
+				partidoComboBox.setEnabled(true);
 			}
 		});
 		
@@ -180,12 +192,9 @@ public class EditarCandidato extends JFrame {
 						estadoIndex = i;
 					}
 				}
-				
-				estadoComboBox = new JComboBox(valores);
-				estadoComboBox.setBounds(65, 142, 150, 20);
+				estadoComboBox.setModel(new DefaultComboBoxModel(valores));
 				estadoComboBox.setSelectedIndex(estadoIndex);
-				contentPane.add(estadoComboBox);
-				contentPane.repaint();
+				estadoComboBox.setEnabled(true);
 			}
 		});
 		
@@ -215,12 +224,9 @@ public class EditarCandidato extends JFrame {
 						cargoIndex = i;
 					}
 				}
-				
-				cargoComboBox = new JComboBox(valores);
-				cargoComboBox.setBounds(65, 169, 125, 20);
+				cargoComboBox.setModel(new DefaultComboBoxModel(valores));
 				cargoComboBox.setSelectedIndex(cargoIndex);
-				contentPane.add(cargoComboBox);
-				contentPane.repaint();
+				cargoComboBox.setEnabled(true);								
 			}
 		});
 		

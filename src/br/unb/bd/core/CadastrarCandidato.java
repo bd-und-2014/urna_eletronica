@@ -52,18 +52,18 @@ public class CadastrarCandidato extends JFrame {
 	private String[] valores;
 	// URL
 	private String URL_INSERT_CANDIDATO;
+	public CadastrarCandidatoListener listener;
 
+	
+	public interface CadastrarCandidatoListener {
+		public void didFinishedCadastrar();
+	}
+	
 	/**
 	 * Create the frame.
 	 */
-	public CadastrarCandidato() {
-		try {
-			//UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-			//UIManager.setLookAndFeel("javax.swing.plaf.metal");
-		} catch (Exception e1) {
-			e1.printStackTrace();
-		} 
-		
+	public CadastrarCandidato(CadastrarCandidatoListener cadastrarCandidatoListener) {
+		this.listener = cadastrarCandidatoListener;
 		setTitle("Cadastrar Candidato - Urna Eletronica");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 400, 300);
@@ -314,7 +314,7 @@ public class CadastrarCandidato extends JFrame {
 
 					JOptionPane.showMessageDialog(null, "Candidato cadastrado com sucesso.", "", JOptionPane.INFORMATION_MESSAGE);
 					dispose();
-					ControleCandidato controleCandidato = new ControleCandidato();
+					listener.didFinishedCadastrar();
 				}
 			}
 		});
