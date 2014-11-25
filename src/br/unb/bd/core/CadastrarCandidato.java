@@ -35,22 +35,26 @@ import br.unb.bd.banco.Banco.BancoListener;
 
 public class CadastrarCandidato extends JFrame {
 
+	// JComponentes
 	private JPanel contentPane;
 	private JTextField nomeField;
 	private JTextField numeroField;
+	private JComboBox partidoComboBox;
+	private JComboBox estadoComboBox;
+	private JComboBox cargoComboBox;
+	
 	private String nome;
 	private int numero;
 	private String partido;
 	private String estado;
 	private String cargo;
-	private JComboBox partidoComboBox;
-	private JComboBox estadoComboBox;
-	private JComboBox cargoComboBox;
+	
 	private ArrayList<ArrayList<String>> objetosPartidos, objetosEstados, objetosCargos;
 	private String partido_id, estado_id, cargo_id;
-	private String URL_INSERT_CANDIDATO;
 	private int cargo_qtdade_digitos;
 	private String[] valores;
+	// URL
+	private String URL_INSERT_CANDIDATO;
 
 	/**
 	 * Create the frame.
@@ -212,14 +216,19 @@ public class CadastrarCandidato extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				if (nomeField.getText().equals("")) {
 					JOptionPane.showMessageDialog(null, "Você esqueceu de preencher o campo nome", "Erro", JOptionPane.INFORMATION_MESSAGE);
+					return;
 				} else if (numeroField.getText().equals("")) {
 					JOptionPane.showMessageDialog(null, "Você esqueceu de preencher o campo número", "Erro", JOptionPane.INFORMATION_MESSAGE);
+					return;
 				} else if (partidoComboBox.getSelectedItem().toString().equals("")){
 					JOptionPane.showMessageDialog(null, "Você esqueceu de preencher o campo partido", "Erro", JOptionPane.INFORMATION_MESSAGE);
+					return;
 				} else if (estadoComboBox.getSelectedItem().toString().equals("")) {
 					JOptionPane.showMessageDialog(null, "Você esqueceu de preencher o campo estado", "Erro", JOptionPane.INFORMATION_MESSAGE);
+					return;
 				} else if (cargoComboBox.getSelectedItem().toString().equals("")) {
 					JOptionPane.showMessageDialog(null, "Você esqueceu de preencher o campo cargo", "Erro", JOptionPane.INFORMATION_MESSAGE);
+					return;
 				} else {
 					nome = nomeField.getText();
 					numero = Integer.parseInt(numeroField.getText());
@@ -252,7 +261,6 @@ public class CadastrarCandidato extends JFrame {
 						JOptionPane.showMessageDialog(null, "Quantidade de dígitos incorreta para o cargo.", "Erro", JOptionPane.INFORMATION_MESSAGE);
 						return;
 					}
-
 					if(cargo.equals("Presidente") && !estado.equals("Todos os Estados")) {
 						JOptionPane.showMessageDialog(null, "Presidente deve escolher 'Todos os estados'.", "Erro", JOptionPane.INFORMATION_MESSAGE);
 						return;
@@ -275,12 +283,12 @@ public class CadastrarCandidato extends JFrame {
 					Banco.getInstance().insertCandidato(new BancoListener() {
 						@Override
 						public void BancoListenerDidFinish(JSONArray arrayObject) {
-							// TODO Auto-generated method stub	
 						}
 					}, URL_INSERT_CANDIDATO);		
 
 					JOptionPane.showMessageDialog(null, "Candidato cadastrado com sucesso.", "", JOptionPane.INFORMATION_MESSAGE);
 					dispose();
+					ControleCandidato controleCandidato = new ControleCandidato();
 				}
 			}
 		});
@@ -298,7 +306,6 @@ public class CadastrarCandidato extends JFrame {
 				cargoComboBox.setSelectedIndex(0);
 			}
 		});
-
 		btnLimpar.setFont(new Font("Consolas", Font.PLAIN, 11));
 		contentPane.add(btnLimpar);
 

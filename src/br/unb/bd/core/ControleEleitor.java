@@ -7,6 +7,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ListSelectionEvent;
@@ -29,21 +30,27 @@ import java.util.ArrayList;
 
 public class ControleEleitor extends JFrame {
 
+	// Painel
 	private JPanel contentPane;
+	// Componentes da tabela
 	private JTable table;
+	private JScrollPane scrollPane;
+	private String [] colunas = {"CPF", "Nome", "Data de Nascimento", "Seção"};
+	// Botões
 	private JButton btnCreate;
 	private JButton btnUpdate;
 	private JButton btnDelete;
+	
 	private int confirmacao;
-	private String [] colunas = {"CPF", "Nome", "Data de Nascimento", "Seção"};
 	private ArrayList<ArrayList<String>> objetos;
 
 	/**
 	 * Create the frame.
 	 */
 	public ControleEleitor() {
+		setTitle("Controle Eleitor - Urna Eletronica");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 525, 350);
+		setBounds(100, 100, 620, 350);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -65,7 +72,7 @@ public class ControleEleitor extends JFrame {
 					item.add("" + objAtual.getString("eleitor_cpf"));
 					item.add("" + objAtual.getString("eleitor_nome"));
 					item.add("" + objAtual.getInt("eleitor_data_nascimento"));
-					item.add("" + objAtual.getInt("secao_id"));
+					item.add("" + objAtual.getString("secao_endereco"));
 					objetos.add(item);
 				}
 
@@ -78,9 +85,9 @@ public class ControleEleitor extends JFrame {
 
 				table = new JTable(valores, colunas);
 				table.setFont(new Font("Consolas", Font.PLAIN, 11));
-				table.setBounds(180, 10, 320, 288);
-				table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
-				contentPane.add(table);
+				scrollPane = new JScrollPane(table);
+				scrollPane.setBounds(180, 10, 400, 288);
+				contentPane.add(scrollPane);
 				contentPane.repaint();
 
 				table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
@@ -93,9 +100,10 @@ public class ControleEleitor extends JFrame {
 		});
 		
 		// Cadastra Eleitor -----------------------------------------------------------------------
-		btnCreate = new JButton("Criar Eleitor");
+		btnCreate = new JButton("Cadastrar Eleitor");
 		btnCreate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				dispose();
 				CadastrarEleitor cadastrarEleitor = new CadastrarEleitor();
 			}
 		});
@@ -107,6 +115,7 @@ public class ControleEleitor extends JFrame {
 		btnUpdate = new JButton("Editar Eleitor");
 		btnUpdate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				dispose();
 				ArrayList<String> eleitor = new ArrayList<String>();
 				for (int i = 0; i < 5; i++) {
 					eleitor.add(objetos.get(table.getSelectedRow()).get(i));
@@ -123,6 +132,7 @@ public class ControleEleitor extends JFrame {
 		btnDelete = new JButton("Remover Eleitor");
 		btnDelete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				dispose();
 				confirmacao = JOptionPane.showConfirmDialog(null, "Deseja mesmo remover o Eleitor selecionado?", "Confirmação", JOptionPane.INFORMATION_MESSAGE);
 				if (confirmacao == JOptionPane.YES_OPTION) {
 					//eleitor_id = Integer.parseInt(objetos.get(table.getSelectedRow()).get(0));

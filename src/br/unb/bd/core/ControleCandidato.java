@@ -24,7 +24,7 @@ import java.util.ArrayList;
 public class ControleCandidato extends JFrame {
 
 	private JPanel contentPane;
-	public JTable table;
+	private JTable table;
 	private JScrollPane scrollPane;
 	private JButton btnUpdate;
 	private JButton btnDelete;
@@ -42,7 +42,7 @@ public class ControleCandidato extends JFrame {
 	public ControleCandidato() {
 		setTitle("Controle de Candidatos - Urna Eletronica");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 619, 350);
+		setBounds(100, 100, 620, 350);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -77,7 +77,6 @@ public class ControleCandidato extends JFrame {
 				}
 				
 				table = new JTable(valores, colunas);
-				
 				table.setFont(new Font("Consolas", Font.PLAIN, 11));
 				scrollPane = new JScrollPane(table);
 				scrollPane.setBounds(180, 10, 400, 288);
@@ -92,7 +91,6 @@ public class ControleCandidato extends JFrame {
 				});
 			}
 		});	
-			
 		// Cadastra Candidato -----------------------------------------------------------------------
 		JButton btnCreate = new JButton("Cadastrar Candidato");
 		btnCreate.addActionListener(new ActionListener() {
@@ -129,7 +127,7 @@ public class ControleCandidato extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				confirmacao = JOptionPane.showConfirmDialog(null, "Deseja mesmo remover o candidato selecionado?", "Confirmação", JOptionPane.INFORMATION_MESSAGE);
 				if (confirmacao == JOptionPane.YES_OPTION) {
-					dispose();;
+					dispose();
 					candidato_id = Integer.parseInt(objetos.get(table.getSelectedRow()).get(0));
 					URL_DELETE_CANDIDATO = "http://ervilhanalata.com.br/projetos/urna_eletronica/deleteCandidato.asp?candidato_id="+candidato_id;
 					Banco.getInstance().deleteCandidato(new BancoListener() {
@@ -146,8 +144,6 @@ public class ControleCandidato extends JFrame {
 		btnDelete.setFont(new Font("Consolas", Font.PLAIN, 11));
 		btnDelete.setBounds(10, 183, 160, 23);
 		contentPane.add(btnDelete);
-		
-		
 		
 		setVisible(true);
 	}

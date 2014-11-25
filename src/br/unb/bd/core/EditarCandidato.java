@@ -54,6 +54,7 @@ public class EditarCandidato extends JFrame {
 	 * Create the frame.
 	 */
 	public EditarCandidato(final ArrayList<String> candidato) {
+		setTitle("Editar Candidato - Urna Eletronica");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
@@ -223,14 +224,19 @@ public class EditarCandidato extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				if (nomeField.getText().equals("")) {
 					JOptionPane.showMessageDialog(null, "Você esqueceu de preencher o campo nome", "Erro", JOptionPane.INFORMATION_MESSAGE);
+					return;
 				} else if (numeroField.getText().equals("")) {
 					JOptionPane.showMessageDialog(null, "Você esqueceu de preencher o campo número", "Erro", JOptionPane.INFORMATION_MESSAGE);
+					return;
 				} else if (partidoComboBox.getSelectedItem().toString().equals("")){
 					JOptionPane.showMessageDialog(null, "Você esqueceu de preencher o campo partido", "Erro", JOptionPane.INFORMATION_MESSAGE);
+					return;
 				} else if (estadoComboBox.getSelectedItem().toString().equals("")) {
 					JOptionPane.showMessageDialog(null, "Você esqueceu de preencher o campo estado", "Erro", JOptionPane.INFORMATION_MESSAGE);
+					return;
 				} else if (cargoComboBox.getSelectedItem().toString().equals("")) {
 					JOptionPane.showMessageDialog(null, "Você esqueceu de preencher o campo cargo", "Erro", JOptionPane.INFORMATION_MESSAGE);
+					return;
 				} else {
 					nome = nomeField.getText();
 					numero = Integer.parseInt(numeroField.getText());
@@ -289,8 +295,8 @@ public class EditarCandidato extends JFrame {
 				}, URL_UPDATE_CANDIDATO);		
 				
 				JOptionPane.showMessageDialog(null, "Candidato editado com sucesso.", "", JOptionPane.INFORMATION_MESSAGE);
-				
 				dispose();
+				ControleCandidato controleCandidato = new ControleCandidato();
 			}
 		});
 		btnConcluir.setFont(new Font("Consolas", Font.PLAIN, 11));

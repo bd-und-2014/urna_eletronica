@@ -10,18 +10,21 @@ import javax.swing.border.EmptyBorder;
 import java.awt.Color;
 import javax.swing.JLabel;
 import java.awt.Font;
+import javax.swing.JButton;
+import javax.swing.JTextField;
 
 public class EditarEleitor extends JFrame {
 
 	private JPanel contentPane;
+	private JTextField textField;
 
 
 	/**
 	 * Create the frame.
 	 */
 	public EditarEleitor(final ArrayList<String> eleitor) {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setBounds(100, 100, 450, 253);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -38,6 +41,31 @@ public class EditarEleitor extends JFrame {
 		lblEditarEleitor.setForeground(Color.WHITE);
 		lblEditarEleitor.setFont(new Font("Consolas", Font.PLAIN, 11));
 		panel.add(lblEditarEleitor);
+		
+		JLabel lblNome = new JLabel("Nome");
+		lblNome.setBounds(10, 56, 46, 14);
+		contentPane.add(lblNome);
+		
+		JLabel lblSeo = new JLabel("Se\u00E7\u00E3o");
+		lblSeo.setBounds(10, 92, 46, 14);
+		contentPane.add(lblSeo);
+		
+		JLabel lblFoto = new JLabel("Foto");
+		lblFoto.setBounds(10, 126, 46, 14);
+		contentPane.add(lblFoto);
+		
+		JButton btnConcluir = new JButton("Concluir");
+		btnConcluir.setBounds(124, 181, 89, 23);
+		contentPane.add(btnConcluir);
+		
+		JButton btnLimpar = new JButton("Limpar");
+		btnLimpar.setBounds(223, 181, 89, 23);
+		contentPane.add(btnLimpar);
+		
+		textField = new JTextField();
+		textField.setBounds(55, 56, 223, 20);
+		contentPane.add(textField);
+		textField.setColumns(10);
 		
 		setVisible(true);
 	}
