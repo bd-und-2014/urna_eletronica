@@ -31,6 +31,16 @@ public class Banco implements InternetConnectionJsonListener {
 		}
 		return instance;
 	}
+	/*
+	 * Controle de Votos
+	 */
+	
+	public void getInfoVotosEstado(BancoListener listener, String estadoID) {
+		//TODO: Implementar isso aqui
+		String jsonString = "[{'porcentagem':45, 'deputado_estadual':'candidato_deputado', 'deputado_federal':'candidato_deputado', 'senador':'candidato_senador', 'governador':'governador',  'presidente':'candidato_presidente'}]";
+		JSONArray arrayObject = new JSONArray(jsonString);
+		listener.BancoListenerDidFinish(arrayObject);
+	}
 	
 	/*
 	 * Retorna todos os candidatos cadastrados no Banco.
