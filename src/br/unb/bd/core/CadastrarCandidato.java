@@ -1,6 +1,7 @@
 package br.unb.bd.core;
 
 import javax.imageio.ImageIO;
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
@@ -91,14 +92,6 @@ public class CadastrarCandidato extends JFrame {
 	public interface CadastrarCandidatoListener {
 		public void didFinishedCadastrar();
 	}
-	/*
-	 * byte[] decodedString = Base64.decode(img, Base64.DEFAULT);
-	Bitmap bitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-	if (bitmap != null) {
-	Drawable image = new BitmapDrawable(Bitmap.createScaledBitmap(bitmap, 90, 100, true));
-	}
-	 */
-	
 	
 	/**
 	 * Create the frame.
@@ -113,22 +106,10 @@ public class CadastrarCandidato extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 
-		nomeField = new JTextField();
-		nomeField.setBounds(66, 163, 286, 20);
-		nomeField.setFont(new Font("Consolas", Font.PLAIN, 11));
-		contentPane.add(nomeField);
-		nomeField.setColumns(10);
-
 		JLabel lblNome = new JLabel("Nome");
 		lblNome.setBounds(10, 166, 46, 14);
 		lblNome.setFont(new Font("Consolas", Font.PLAIN, 11));
-		contentPane.add(lblNome);
-
-		numeroField = new JTextField();
-		numeroField.setBounds(66, 194, 71, 20);
-		numeroField.setFont(new Font("Consolas", Font.PLAIN, 11));
-		numeroField.setColumns(10);
-		contentPane.add(numeroField);
+		contentPane.add(lblNome);		
 
 		JLabel lblNumero = new JLabel("N\u00FAmero");
 		lblNumero.setBounds(10, 197, 46, 14);
@@ -163,6 +144,18 @@ public class CadastrarCandidato extends JFrame {
 		lblCadastrarCandidato.setHorizontalAlignment(SwingConstants.LEFT);
 		panel.add(lblCadastrarCandidato);
 		
+		nomeField = new JTextField();
+		nomeField.setBounds(66, 163, 286, 20);
+		nomeField.setFont(new Font("Consolas", Font.PLAIN, 11));
+		contentPane.add(nomeField);
+		nomeField.setColumns(10);
+		
+		numeroField = new JTextField();
+		numeroField.setBounds(66, 194, 71, 20);
+		numeroField.setFont(new Font("Consolas", Font.PLAIN, 11));
+		numeroField.setColumns(10);
+		contentPane.add(numeroField);
+		
 		partidoComboBox = new JComboBox(new String[0]);
 		partidoComboBox.setBounds(65, 228, 285, 20);
 		partidoComboBox.setEnabled(false);
@@ -182,7 +175,7 @@ public class CadastrarCandidato extends JFrame {
 			@Override
 			public void BancoListenerDidFinish(JSONArray arrayObject) {
 				if (arrayObject == null) {
-					JOptionPane.showMessageDialog(null, "Algum erro ocorreu na recupera��o dos dados.", "Erro", JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showMessageDialog(null, "Algum erro ocorreu na recupera��o dos dados.", "Erro", JOptionPane.ERROR_MESSAGE);
 					return;
 				}
 				objetosPartidos = new ArrayList<ArrayList<String>>();
@@ -201,13 +194,8 @@ public class CadastrarCandidato extends JFrame {
 				for(int i =1; i <= objetosPartidos.size(); i++){
 					valores[i]= objetosPartidos.get(i-1).get(1);
 				}
-//				partidoComboBox = new JComboBox(valores);
-//				partidoComboBox.setBounds(65, 125, 285, 20);
-//				contentPane.add(partidoComboBox);
 				partidoComboBox.setModel(new DefaultComboBoxModel(valores));
 				partidoComboBox.setEnabled(true);
-
-				//contentPane.repaint();
 			}
 		});
 
@@ -234,13 +222,8 @@ public class CadastrarCandidato extends JFrame {
 				for(int i = 1; i <= objetosEstados.size(); i++){
 					valores[i]= objetosEstados.get(i-1).get(1);
 				}
-
-//				estadoComboBox = new JComboBox(valores);
-//				estadoComboBox.setBounds(65, 152, 150, 20);
-//				contentPane.add(estadoComboBox);
 				estadoComboBox.setModel(new DefaultComboBoxModel(valores));
 				estadoComboBox.setEnabled(true);
-				//contentPane.repaint();
 			}
 		});
 
@@ -267,13 +250,8 @@ public class CadastrarCandidato extends JFrame {
 				for(int i =1; i <= objetosCargos.size(); i++){
 					valores[i]= objetosCargos.get(i-1).get(1);
 				}
-//				cargoComboBox = new JComboBox(valores);
-//				cargoComboBox.setBounds(65, 179, 125, 20);
-//				contentPane.add(cargoComboBox);
 				cargoComboBox.setModel(new DefaultComboBoxModel(valores));
 				cargoComboBox.setEnabled(true);
-				
-				//contentPane.repaint();
 			}
 		});
 
@@ -282,19 +260,19 @@ public class CadastrarCandidato extends JFrame {
 		btnCadastrar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if (nomeField.getText().equals("")) {
-					JOptionPane.showMessageDialog(null, "Voc� esqueceu de preencher o campo nome", "Erro", JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showMessageDialog(null, "Voc� esqueceu de preencher o campo nome", "Erro", JOptionPane.ERROR_MESSAGE);
 					return;
 				} else if (numeroField.getText().equals("")) {
-					JOptionPane.showMessageDialog(null, "Voc� esqueceu de preencher o campo n�mero", "Erro", JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showMessageDialog(null, "Voc� esqueceu de preencher o campo n�mero", "Erro", JOptionPane.ERROR_MESSAGE);
 					return;
 				} else if (partidoComboBox.getSelectedItem().toString().equals("")){
-					JOptionPane.showMessageDialog(null, "Voc� esqueceu de preencher o campo partido", "Erro", JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showMessageDialog(null, "Voc� esqueceu de preencher o campo partido", "Erro", JOptionPane.ERROR_MESSAGE);
 					return;
 				} else if (estadoComboBox.getSelectedItem().toString().equals("")) {
-					JOptionPane.showMessageDialog(null, "Voc� esqueceu de preencher o campo estado", "Erro", JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showMessageDialog(null, "Voc� esqueceu de preencher o campo estado", "Erro", JOptionPane.ERROR_MESSAGE);
 					return;
 				} else if (cargoComboBox.getSelectedItem().toString().equals("")) {
-					JOptionPane.showMessageDialog(null, "Voc� esqueceu de preencher o campo cargo", "Erro", JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showMessageDialog(null, "Voc� esqueceu de preencher o campo cargo", "Erro", JOptionPane.ERROR_MESSAGE);
 					return;
 				} else {
 					nome = nomeField.getText();
@@ -325,29 +303,17 @@ public class CadastrarCandidato extends JFrame {
 					String tmp = "" + numero;
 
 					if(cargo_qtdade_digitos != tmp.length()) {
-						JOptionPane.showMessageDialog(null, "Quantidade de d�gitos incorreta para o cargo.", "Erro", JOptionPane.INFORMATION_MESSAGE);
+						JOptionPane.showMessageDialog(null, "Quantidade de d�gitos incorreta para o cargo.", "Erro", JOptionPane.ERROR_MESSAGE);
 						return;
 					}
 					if(cargo.equals("Presidente") && !estado.equals("Todos os Estados")) {
-						JOptionPane.showMessageDialog(null, "Presidente deve escolher 'Todos os estados'.", "Erro", JOptionPane.INFORMATION_MESSAGE);
+						JOptionPane.showMessageDialog(null, "Presidente deve escolher 'Todos os estados'.", "Erro", JOptionPane.ERROR_MESSAGE);
 						return;
 					} else if (!cargo.equals("Presidente") && estado.equals("Todos os Estados")) {
-						JOptionPane.showMessageDialog(null, "'Todos os Estados' n�o � valido para o cargo escolhido.", "Erro", JOptionPane.INFORMATION_MESSAGE);
+						JOptionPane.showMessageDialog(null, "'Todos os Estados' n�o � valido para o cargo escolhido.", "Erro", JOptionPane.ERROR_MESSAGE);
 						return;						
 					}
-
-					/*
-					try {
-						URL_INSERT_CANDIDATO = "http://ervilhanalata.com.br/projetos/urna_eletronica/insertCandidato.asp?";
-						URL_INSERT_CANDIDATO += "candidato_nome="+ URLEncoder.encode(nome, "UTF-8");
-						URL_INSERT_CANDIDATO += "&candidato_foto=foto&candidato_numero=";
-						URL_INSERT_CANDIDATO += numero+"&estado_id="+estado_id+"&cargo_id="+cargo_id+"&partido_id="+partido_id;
-
-					} catch (UnsupportedEncodingException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}	
-					*/			
+					
 					String encodedImageString = "";
 					try {
 						BufferedImage image = ImageIO.read(arquivoFoto); 
@@ -359,12 +325,6 @@ public class CadastrarCandidato extends JFrame {
 					} catch(Exception e) {
 						
 					}
-					
-					/*
-					Bitmap bitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-					if (bitmap != null) {
-					Drawable image = new BitmapDrawable(Bitmap.createScaledBitmap(bitmap, 90, 100, true));
-					*/
 					
 					btnCadastrar.setEnabled(false);
 					Banco.getInstance().insertCandidato(new BancoListener() {
@@ -400,13 +360,12 @@ public class CadastrarCandidato extends JFrame {
 		JButton btnCarregarImagem = new JButton("Carregar imagem");
 		btnCarregarImagem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				JOptionPane.showMessageDialog(null, "Selecione a imagem (.jpg)");
 				JFileChooser fc = new JFileChooser("Imagens/");
 				fc.setDialogTitle("Abrir");
 				fc.showOpenDialog(null);
 				arquivoFoto = fc.getSelectedFile();
 				if(arquivoFoto == null) {
-					JOptionPane.showMessageDialog(null, "[Arquivo] Não foi escolhida nenhuma foto", "[ERRO]", JOptionPane.ERROR_MESSAGE);
+					return;
 				}
 				BufferedImage myPicture;
 				try {
@@ -416,16 +375,14 @@ public class CadastrarCandidato extends JFrame {
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
-				}
-				
-				
+				}	
 			}
 		});
 		
 		btnCarregarImagem.setBounds(211, 92, 141, 30);
 		contentPane.add(btnCarregarImagem);
 		
-		lblNewLabel = new JLabel("");
+		JLabel lblNewLabel = new JLabel("");
 		lblNewLabel.setBounds(92, 51, 89, 100);
 		contentPane.add(lblNewLabel);
 

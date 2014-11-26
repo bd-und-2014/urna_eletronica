@@ -5,11 +5,18 @@ import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
 import java.awt.Color;
+
 import javax.swing.JLabel;
+
 import java.awt.Font;
+
 import javax.swing.JButton;
 import javax.swing.JTextField;
+
+import br.unb.bd.core.EditarCandidato.EditarCandidatoListener;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
@@ -17,12 +24,17 @@ public class EditarEleitor extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField nomeTextField;
+	public final EditarEleitorListener listener;
 	
+	public interface EditarEleitorListener {
+		public void didFinishedEditar();
+	}
 
 	/**
 	 * Create the frame.
 	 */
-	public EditarEleitor(final ArrayList<String> eleitor) {
+	public EditarEleitor(final ArrayList<String> eleitor, EditarEleitorListener editarEleitorListener) {
+		this.listener = editarEleitorListener;
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 450, 253);
 		contentPane = new JPanel();

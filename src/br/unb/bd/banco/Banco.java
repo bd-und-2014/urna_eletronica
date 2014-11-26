@@ -23,6 +23,10 @@ public class Banco implements InternetConnectionJsonListener {
 	private static String URL_ALL_CARGOS = "http://ervilhanalata.com.br/projetos/urna_eletronica/getCargos.asp";
 	private static String URL_RESET_URNA = "http://ervilhanalata.com.br/projetos/urna_eletronica/ios/ipad/resetarTudo.asp";
 	private static String URL_INSERT_CANDIDATO = "http://ervilhanalata.com.br/projetos/urna_eletronica/insertCandidato.asp?";
+	private static String URL_INSERT_ELEITOR = "http://ervilhanalata.com.br/projetos/urna_eletronica/insertEleitor.asp?";
+	private static String URL_ALL_ZONAS = "http://ervilhanalata.com.br/ervilha/projetos/urna_eletronica/getAllZonas.asp";
+	private static String URL_ALL_SECOES = "http://ervilhanalata.com.br/ervilha/projetos/urna_eletronica/getAllSecoes.asp?";
+	
 	private static Banco instance;
 	
 	private Banco() {
@@ -76,6 +80,17 @@ public class Banco implements InternetConnectionJsonListener {
 		connection.execute();
 	}
 	
+	public void getAllZonas(BancoListener listener) {
+		InternetConnectionJson connection = new InternetConnectionJson(URL_ALL_ZONAS, this, listener);
+		connection.execute();
+	}
+	
+	public void getAllSecoes(BancoListener listener, String zona_id) {
+		String urlFinal = URL_ALL_SECOES + "zona_id=" +zona_id;
+		InternetConnectionJson connection = new InternetConnectionJson(urlFinal, this, listener);
+		connection.execute();
+	}
+	
 	public void resetarUrna(BancoListener listener) {
 		InternetConnectionJson connection = new InternetConnectionJson(URL_RESET_URNA, this, listener);
 		connection.execute();
@@ -111,6 +126,29 @@ public class Banco implements InternetConnectionJsonListener {
 		InternetConnectionJson connection = new InternetConnectionJson(URL_UPDATE_CANDIDATO, this, listener);
 		connection.execute();
 	}
+	
+	public void insertEleitor(BancoListener listener, String eleitor_cpf, String eleitor_nome, String eleitor_foto, String eleitor_data_nascimento, String secao_id) {
+		
+		try {
+			String urlFinal = URL_INSERT_ELEITOR + "eleitor_cpf=" + eleitor_cpf;
+			urlFinal += "&eleitor_nome=" + URLEncoder.encode(eleitor_nome, "UTF-8");
+			urlFinal += "&eleitor_data_nascimento=" + eleitor_data_nascimento;
+			urlFinal += "&eleitor_foto=" + URLEncoder.encode(eleitor_foto.replace("\n", ""), "UTF-8");
+			urlFinal += "&secao_id=" + secao_id;
+			
+			System.out.println("hey: " + urlFinal);
+			
+			InternetConnectionJson connection = new InternetConnectionJson(urlFinal, this, listener);
+			connection.execute();
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+	
+	
+	
 	
 	/*
 	 * Retorna todos os participantes do nosso grupo. Fun�‹o de teste - Silent

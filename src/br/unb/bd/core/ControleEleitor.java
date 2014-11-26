@@ -1,6 +1,7 @@
 package br.unb.bd.core;
 
 import javax.swing.JButton;
+
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -15,6 +16,8 @@ import org.json.JSONObject;
 
 import br.unb.bd.banco.Banco;
 import br.unb.bd.banco.Banco.BancoListener;
+import br.unb.bd.core.CadastrarEleitor.CadastrarEleitorListener;
+import br.unb.bd.core.EditarEleitor.EditarEleitorListener;
 
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -36,20 +39,8 @@ public class ControleEleitor extends JFrame {
 	
 	private int confirmacao;
 	private ArrayList<ArrayList<String>> objetos;
-
-	/**
-	 * Create the frame.
-	 */
-	public ControleEleitor() {
-		setTitle("Controle Eleitor - Urna Eletronica");
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 620, 350);
-		contentPane = new JPanel();
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		setContentPane(contentPane);
-		contentPane.setLayout(null);
-
-		// Recupera Eleitores --------------------------------------------------------------------------
+	
+	public void refreshTable() {
 		Banco.getInstance().getAllEleitores(new BancoListener() {
 			@Override
 			public void BancoListenerDidFinish(JSONArray arrayObject) {
@@ -66,6 +57,7 @@ public class ControleEleitor extends JFrame {
 					item.add("" + objAtual.getString("eleitor_nome"));
 					item.add("" + objAtual.getInt("eleitor_data_nascimento"));
 					item.add("" + objAtual.getString("secao_endereco"));
+					item.add("" + objAtual.getString("eleitor_foto"));
 					objetos.add(item);
 				}
 
@@ -91,13 +83,37 @@ public class ControleEleitor extends JFrame {
 				});
 			}
 		});
+	}
+
+	/**
+	 * Create the frame.
+	 */
+	public ControleEleitor() {
+		setTitle("Controle Eleitor - Urna Eletronica");
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setBounds(100, 100, 620, 350);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setContentPane(contentPane);
+		contentPane.setLayout(null);
+
+		// Recupera Eleitores --------------------------------------------------------------------------
+		refreshTable();
 		
 		// Cadastra Eleitor -----------------------------------------------------------------------
 		btnCreate = new JButton("Cadastrar Eleitor");
 		btnCreate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				dispose();
-				CadastrarEleitor cadastrarEleitor = new CadastrarEleitor();
+				CadastrarEleitor cadastrarEleitor = new CadastrarEleitor(new CadastrarEleitorListener() {
+					
+					@Override
+					public void didFinishedCadastrar() {
+						// TODO Auto-generated method stub
+						contentPane.remove(scrollPane);
+						refreshTable();
+						
+					}
+				});
 			}
 		});
 		btnCreate.setFont(new Font("Consolas", Font.PLAIN, 11));
@@ -108,12 +124,19 @@ public class ControleEleitor extends JFrame {
 		btnUpdate = new JButton("Editar Eleitor");
 		btnUpdate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				dispose();
 				ArrayList<String> eleitor = new ArrayList<String>();
-				for (int i = 0; i < 5; i++) {
+				for (int i = 0; i < 6; i++) {
 					eleitor.add(objetos.get(table.getSelectedRow()).get(i));
 				}
-			EditarEleitor editarEleitor = new EditarEleitor(eleitor);
+			EditarEleitor editarEleitor = new EditarEleitor(eleitor, new EditarEleitorListener() {				
+				@Override
+				public void didFinishedEditar() {
+					// TODO Auto-generated method stub
+					contentPane.remove(scrollPane);
+					refreshTable();
+					
+				}
+			});
 			}
 		});
 		btnUpdate.setEnabled(false);
@@ -128,7 +151,6 @@ public class ControleEleitor extends JFrame {
 				
 				confirmacao = JOptionPane.showConfirmDialog(null, "Deseja mesmo remover o Eleitor selecionado?", "Confirmação", JOptionPane.INFORMATION_MESSAGE);
 				if (confirmacao == JOptionPane.YES_OPTION) {
-					dispose();
 					//eleitor_id = Integer.parseInt(objetos.get(table.getSelectedRow()).get(0));
 					//URL_DELETE_ELEITOR = 
 					/*Banco.getInstance().deleteEleitor(new BancoListener() {
@@ -138,6 +160,8 @@ public class ControleEleitor extends JFrame {
 								}
 							}, URL_DELETE_ELEITOR);*/
 					JOptionPane.showMessageDialog(null, "Eleitor removido com sucesso.", "", JOptionPane.INFORMATION_MESSAGE);
+					contentPane.remove(scrollPane);
+					refreshTable();
 				}
 			}
 		});
