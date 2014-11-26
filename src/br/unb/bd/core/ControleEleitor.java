@@ -58,6 +58,7 @@ public class ControleEleitor extends JFrame {
 					item.add("" + objAtual.getInt("eleitor_data_nascimento"));
 					item.add("" + objAtual.getString("secao_endereco"));
 					item.add("" + objAtual.getString("eleitor_foto"));
+					item.add("" + objAtual.getString("zona_descricao"));
 					objetos.add(item);
 				}
 
@@ -125,7 +126,7 @@ public class ControleEleitor extends JFrame {
 		btnUpdate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				ArrayList<String> eleitor = new ArrayList<String>();
-				for (int i = 0; i < 6; i++) {
+				for (int i = 0; i < 7; i++) {
 					eleitor.add(objetos.get(table.getSelectedRow()).get(i));
 				}
 			EditarEleitor editarEleitor = new EditarEleitor(eleitor, new EditarEleitorListener() {				
@@ -134,7 +135,6 @@ public class ControleEleitor extends JFrame {
 					// TODO Auto-generated method stub
 					contentPane.remove(scrollPane);
 					refreshTable();
-					
 				}
 			});
 			}

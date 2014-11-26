@@ -307,12 +307,13 @@ public class EditarCandidato extends JFrame {
 					@Override
 					public void BancoListenerDidFinish(JSONArray arrayObject) {
 						// TODO Auto-generated method stub	
+						JOptionPane.showMessageDialog(null, "Candidato editado com sucesso.", "", JOptionPane.INFORMATION_MESSAGE);
+						listener.didFinishedEditar();
+						dispose();
 					}
 				}, URL_UPDATE_CANDIDATO);		
 				
-				JOptionPane.showMessageDialog(null, "Candidato editado com sucesso.", "", JOptionPane.INFORMATION_MESSAGE);
-				listener.didFinishedEditar();
-				dispose();
+				
 			}
 		});
 		btnConcluir.setFont(new Font("Consolas", Font.PLAIN, 11));

@@ -179,7 +179,10 @@ public class CadastrarEleitor extends JFrame {
 		
 		zonaEleitoralComboBox.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+				if (zonaEleitoralComboBox.getSelectedItem().toString().equals("")) {
+					secaoEleitoralComboBox.setEnabled(false);
+					return;
+				}				
 				for(int i =0; i < objetosZonas.size(); i++){
 					if(objetosZonas.get(i).get(1).equals(zonaEleitoralComboBox.getSelectedItem().toString())) {
 						zona_id = objetosZonas.get(i).get(0);
@@ -290,6 +293,10 @@ public class CadastrarEleitor extends JFrame {
 		btnLimpar.setBounds(191, 354, 89, 23);
 		btnLimpar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				nomeTextField.setText("");
+				CPFTextField.setText("");
+				dataNascimentoComboBox.setSelectedIndex(0);
+				zonaEleitoralComboBox.setSelectedIndex(0);
 			}
 		});
 		btnLimpar.setFont(new Font("Consolas", Font.PLAIN, 11));

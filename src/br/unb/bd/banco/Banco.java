@@ -147,9 +147,6 @@ public class Banco implements InternetConnectionJsonListener {
 		
 	}
 	
-	
-	
-	
 	/*
 	 * Retorna todos os participantes do nosso grupo. Fun�‹o de teste - Silent
 	 */
