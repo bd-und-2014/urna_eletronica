@@ -328,7 +328,7 @@ public class CadastrarEleitor extends JFrame {
 		btnCarregarImagem.setBounds(211, 92, 141, 30);
 		contentPane.add(btnCarregarImagem);
 		
-		JLabel lblNewLabel = new JLabel("");
+		lblNewLabel = new JLabel("");
 		lblNewLabel.setBounds(92, 51, 89, 100);
 		contentPane.add(lblNewLabel);
 		

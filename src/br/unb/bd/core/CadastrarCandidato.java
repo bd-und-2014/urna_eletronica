@@ -357,6 +357,7 @@ public class CadastrarCandidato extends JFrame {
 		btnLimpar.setFont(new Font("Consolas", Font.PLAIN, 11));
 		contentPane.add(btnLimpar);
 		
+		
 		JButton btnCarregarImagem = new JButton("Carregar imagem");
 		btnCarregarImagem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -382,7 +383,7 @@ public class CadastrarCandidato extends JFrame {
 		btnCarregarImagem.setBounds(211, 92, 141, 30);
 		contentPane.add(btnCarregarImagem);
 		
-		JLabel lblNewLabel = new JLabel("");
+		lblNewLabel = new JLabel("");
 		lblNewLabel.setBounds(92, 51, 89, 100);
 		contentPane.add(lblNewLabel);
 
